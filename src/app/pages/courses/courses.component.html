@@ -1,0 +1,89 @@
+<section class="page-header">
+
+  <div class="container">
+
+    <h1>All Courses</h1>
+
+    <p>
+      Home / Courses
+    </p>
+
+  </div>
+
+</section>
+
+
+<section class="courses-section">
+
+  <div class="container">
+
+    <div class="intro">
+
+      <p>
+        Explore our industry-focused courses designed
+        to build your skills and boost your career.
+      </p>
+
+    </div>
+
+
+    <div class="course-grid">
+
+      <div
+        class="course-card"
+        *ngFor="let course of courses">
+
+        <div class="course-icon">
+
+          {{ course.icon }}
+
+        </div>
+
+
+        <h2>
+          {{ course.title }}
+        </h2>
+
+
+        <p class="course-description">
+
+          {{ course.description }}
+
+        </p>
+
+
+        <div class="course-meta">
+
+          <span>
+            {{ course.duration }}
+          </span>
+
+          <span>
+            {{ course.level }}
+          </span>
+
+        </div>
+
+
+        <div class="course-price">
+
+          ₹{{ course.fee | number }}
+
+        </div>
+
+
+        <a
+          [routerLink]="['/courses', course.slug]"
+          class="btn">
+
+          View Details →
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

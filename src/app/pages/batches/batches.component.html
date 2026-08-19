@@ -1,0 +1,99 @@
+<section class="page-header">
+
+  <div class="container">
+
+    <h1>
+      Upcoming Batches
+    </h1>
+
+    <p>
+      Home / Batches
+    </p>
+
+  </div>
+
+</section>
+
+
+<section class="batches-section">
+
+  <div class="container">
+
+    <div class="table-container">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>Course</th>
+            <th>Start Date</th>
+            <th>Time</th>
+            <th>Mode</th>
+            <th>Duration</th>
+            <th>Seats Left</th>
+            <th>Action</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let batch of batches">
+
+            <td>
+              {{ batch.courseName }}
+            </td>
+
+            <td>
+              {{ batch.startDate }}
+            </td>
+
+            <td>
+              {{ batch.time }}
+            </td>
+
+            <td>
+              {{ batch.mode }}
+            </td>
+
+            <td>
+              {{ batch.duration }}
+            </td>
+
+            <td>
+              {{ batch.seatsLeft }}
+            </td>
+
+            <td>
+
+              <a
+                [routerLink]="[
+                  '/enroll',
+                  batch.courseName
+                    .toLowerCase()
+                    .replaceAll(' ', '-')
+                ]"
+                class="btn">
+
+                Enroll Now
+
+              </a>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>

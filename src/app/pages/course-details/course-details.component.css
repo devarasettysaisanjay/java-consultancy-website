@@ -1,0 +1,179 @@
+.page-header {
+  background: #082752;
+  color: white;
+  padding: 45px 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+.page-header h1 {
+  font-size: 42px;
+  margin: 10px 0;
+}
+
+.header-description {
+  max-width: 750px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.course-section {
+  background: #f6f8fb;
+  padding: 50px 0;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 35px;
+}
+
+.content-card {
+  background: white;
+  padding: 30px;
+  margin-bottom: 25px;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.content-card h2 {
+  color: #082752;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.content-card p {
+  line-height: 1.7;
+  color: #444;
+}
+
+.content-card ul {
+  padding-left: 20px;
+}
+
+.content-card li {
+  margin-bottom: 12px;
+}
+
+.topics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.topic {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.check {
+  color: #1769e0;
+  font-weight: bold;
+}
+
+.benefits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.benefits div {
+  padding: 15px;
+  background: #f5f8fd;
+  border-radius: 6px;
+}
+
+.course-sidebar {
+  position: relative;
+}
+
+.price-card {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 20px;
+}
+
+.course-icon {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.price-card h2 {
+  color: #082752;
+  font-size: 26px;
+}
+
+.price {
+  color: #1769e0;
+  font-size: 32px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.enroll-btn {
+  width: 100%;
+  background: #1769e0;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.enroll-btn:hover {
+  background: #0d55bd;
+}
+
+.secure {
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+
+@media (max-width: 768px) {
+
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topics {
+    grid-template-columns: 1fr;
+  }
+
+  .benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h1 {
+    font-size: 32px;
+  }
+
+}

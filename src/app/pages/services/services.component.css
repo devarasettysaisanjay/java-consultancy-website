@@ -1,0 +1,286 @@
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 94%;
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+
+/* PAGE HEADER */
+
+.page-header {
+  background: #092650;
+  color: white;
+  padding: 28px 0 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.breadcrumb {
+  font-size: 14px;
+}
+
+.breadcrumb a {
+  color: white;
+  text-decoration: none;
+}
+
+.breadcrumb span {
+  margin-left: 7px;
+}
+
+
+/* SERVICES */
+
+.services-section {
+  background: #fff;
+  padding: 25px 0 45px;
+}
+
+.services-intro {
+  text-align: center;
+  font-size: 15px;
+  color: #222;
+  margin: 0 0 22px;
+}
+
+
+/* SIX COLUMNS */
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+
+/* CARD */
+
+.service-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, .08);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* CARD HEADER */
+
+.service-title {
+  background: #092650;
+  color: white;
+  min-height: 58px;
+  padding: 14px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.service-title h2 {
+  font-size: 17px;
+  margin: 0;
+  font-weight: 700;
+}
+
+
+/* CARD BODY */
+
+.service-body {
+  padding: 16px 15px 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* OVERVIEW */
+
+.overview h3,
+.contents h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #111;
+}
+
+.overview-content {
+  display: flex;
+  align-items: flex-start;
+  min-height: 85px;
+}
+
+.overview-content p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #333;
+  flex: 1;
+}
+
+.service-icon {
+  width: 65px;
+  min-width: 65px;
+  height: 65px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+
+/* CONTENTS */
+
+.contents {
+  margin-top: 8px;
+}
+
+.contents ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.contents li {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin-bottom: 7px;
+  font-size: 10px;
+  line-height: 1.35;
+  color: #222;
+}
+
+.check {
+  color: #176dcc;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 12px;
+}
+
+
+/* BUTTON */
+
+.enquire {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.enquire-btn {
+  display: inline-block;
+  background: #1469d8;
+  color: white;
+  padding: 9px 18px;
+  border-radius: 3px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.enquire-btn:hover {
+  background: #0958bd;
+}
+
+
+/* FEATURES */
+
+.features-box .service-body {
+  padding: 0;
+}
+
+.feature-list {
+  padding: 0 15px;
+}
+
+.feature-item {
+  display: flex;
+  gap: 10px;
+  padding: 17px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.feature-icon {
+  width: 38px;
+  min-width: 38px;
+  font-size: 25px;
+  text-align: center;
+}
+
+.feature-item h3 {
+  margin: 0 0 5px;
+  font-size: 12px;
+  color: #111;
+}
+
+.feature-item p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #333;
+}
+
+
+/* TABLET */
+
+@media (max-width: 1200px) {
+
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .container {
+    width: 92%;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .page-header {
+    padding: 22px 0;
+  }
+
+  .page-header h1 {
+    font-size: 27px;
+  }
+
+  .service-title {
+    min-height: 55px;
+  }
+
+  .service-title h2 {
+    font-size: 18px;
+  }
+
+  .overview-content p {
+    font-size: 13px;
+  }
+
+  .contents li {
+    font-size: 12px;
+  }
+
+}

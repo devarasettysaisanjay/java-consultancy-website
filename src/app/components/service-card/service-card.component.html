@@ -1,0 +1,32 @@
+<div class="service-card">
+
+  <div class="card-icon">
+
+    {{ service?.icon }}
+
+  </div>
+
+
+  <div class="card-content">
+
+    <h3>
+      {{ service?.name }}
+    </h3>
+
+    <p>
+      {{ service?.description }}
+    </p>
+
+
+    <a
+      [routerLink]="['/services', service?.slug]"
+      class="details">
+
+      View Details
+      <span>→</span>
+
+    </a>
+
+  </div>
+
+</div>

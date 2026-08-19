@@ -1,0 +1,451 @@
+/* ================================
+   PAGE HEADER
+================================ */
+
+.page-header {
+  background: linear-gradient(135deg, #08234d, #0d3b78);
+  color: white;
+  padding: 55px 0;
+}
+
+.page-header .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 10px;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 0;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+
+/* ================================
+   ENROLL SECTION
+================================ */
+
+.enroll-section {
+  background: #f5f7fb;
+  padding: 60px 0;
+  min-height: 650px;
+}
+
+.enroll-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+
+/* ================================
+   TWO COLUMN LAYOUT
+================================ */
+
+.enroll-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  gap: 35px;
+  align-items: start;
+}
+
+
+/* ================================
+   FORM CARD
+================================ */
+
+.form-card,
+.order-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(15, 35, 70, 0.08);
+  border: 1px solid #e8edf5;
+}
+
+
+/* FORM */
+
+.form-card {
+  padding: 38px 42px;
+}
+
+.form-card h2,
+.order-card h2 {
+  color: #082b5c;
+  margin: 0 0 30px;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+
+/* ================================
+   FORM ELEMENTS
+================================ */
+
+form {
+  width: 100%;
+}
+
+form label {
+  display: block;
+  margin: 0 0 8px;
+  color: #172b4d;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="tel"],
+form select,
+form textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 13px 15px;
+
+  margin: 0 0 20px;
+
+  border: 1px solid #d5dce8;
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #172b4d;
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* Focus */
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="tel"]:focus,
+form select:focus,
+form textarea:focus {
+  border-color: #1769e0;
+
+  box-shadow:
+    0 0 0 3px rgba(23, 105, 224, 0.12);
+}
+
+
+/* Placeholder */
+
+form input::placeholder,
+form textarea::placeholder {
+  color: #9aa6b6;
+}
+
+
+/* Select */
+
+form select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+
+/* Textarea */
+
+form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+
+/* ================================
+   CHECKBOX
+================================ */
+
+form label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 5px 0 22px;
+
+  font-weight: 500;
+  color: #344563;
+
+  cursor: pointer;
+}
+
+form label.checkbox input {
+  width: 18px;
+  height: 18px;
+
+  margin: 0;
+
+  accent-color: #1769e0;
+
+  cursor: pointer;
+}
+
+
+/* ================================
+   PAYMENT BUTTON
+================================ */
+
+.payment-btn {
+  width: 100%;
+
+  padding: 15px 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: linear-gradient(
+    135deg,
+    #1769e0,
+    #0d5bd3
+  );
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.payment-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(23, 105, 224, 0.25);
+}
+
+.payment-btn:disabled {
+  background: #b7c1d1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+/* ================================
+   ORDER SUMMARY
+================================ */
+
+.order-card {
+  padding: 38px 36px;
+  position: sticky;
+  top: 25px;
+}
+
+.order-card h2 {
+  margin-bottom: 28px;
+}
+
+
+/* Selected course */
+
+.selected-course {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 5px 0 22px;
+}
+
+.course-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eef5ff;
+
+  border-radius: 12px;
+
+  font-size: 30px;
+
+  flex-shrink: 0;
+}
+
+.selected-course h3 {
+  margin: 0 0 7px;
+
+  color: #082b5c;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.selected-course p {
+  margin: 0 0 5px;
+
+  color: #667085;
+
+  font-size: 14px;
+}
+
+.selected-course span {
+  display: inline-block;
+
+  color: #1769e0;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* Divider */
+
+.order-card hr {
+  border: none;
+
+  border-top: 1px solid #e4e8ef;
+
+  margin: 22px 0;
+}
+
+
+/* Summary rows */
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+
+  color: #526071;
+
+  font-size: 15px;
+}
+
+.summary-row strong {
+  color: #172b4d;
+  font-size: 16px;
+}
+
+
+/* Total */
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 5px;
+
+  color: #172b4d;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.total strong {
+  color: #1769e0;
+  font-size: 25px;
+}
+
+
+/* ================================
+   BENEFITS
+================================ */
+
+.benefits {
+  margin-top: 30px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid #e4e8ef;
+}
+
+.benefits h3 {
+  margin: 0 0 15px;
+
+  color: #082b5c;
+
+  font-size: 17px;
+}
+
+.benefits ul {
+  list-style: none;
+
+  margin: 0;
+  padding: 0;
+}
+
+.benefits li {
+  padding: 8px 0;
+
+  color: #526071;
+
+  font-size: 14px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+  .enroll-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-card {
+    position: static;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .page-header {
+    padding: 40px 0;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .enroll-section {
+    padding: 35px 0;
+  }
+
+  .enroll-section .container {
+    padding: 0 15px;
+  }
+
+  .form-card,
+  .order-card {
+    padding: 25px 20px;
+    border-radius: 12px;
+  }
+
+  .form-card h2,
+  .order-card h2 {
+    font-size: 23px;
+  }
+
+  .selected-course {
+    gap: 12px;
+  }
+
+}

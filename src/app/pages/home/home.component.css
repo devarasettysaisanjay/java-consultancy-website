@@ -1,0 +1,675 @@
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 92%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  height: 72px;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 100;
+}
+
+.nav-container {
+  width: 92%;
+  max-width: 1400px;
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  text-decoration: none;
+  color: #101828;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.logo-icon {
+  font-size: 32px;
+  margin-right: 8px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #172033;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #1266d6;
+}
+
+.nav-links a.active {
+  color: #1266d6;
+}
+
+.nav-button {
+  background: #1266d6;
+  color: white !important;
+
+  padding: 12px 22px;
+
+  border-radius: 4px;
+}
+
+.mobile-menu {
+  display: none;
+  font-size: 28px;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  position: relative;
+
+  min-height: 520px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      120deg,
+      #071b38,
+      #0b2850 55%,
+      #08234a
+    );
+
+  color: white;
+}
+
+.hero-container {
+  min-height: 520px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: relative;
+  z-index: 5;
+}
+
+.hero-content {
+  width: 48%;
+  padding: 50px 0;
+}
+
+.eyebrow {
+  display: inline-block;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  color: #72a9ef;
+
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-size: 52px;
+  line-height: 1.1;
+
+  margin: 0 0 22px;
+
+  font-weight: 800;
+}
+
+.hero h1 span {
+  display: block;
+}
+
+.hero p {
+  max-width: 600px;
+
+  font-size: 16px;
+  line-height: 1.8;
+
+  color: #e0e9f5;
+
+  margin-bottom: 30px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+}
+
+.btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 130px;
+
+  padding: 13px 22px;
+
+  border-radius: 4px;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  transition: 0.3s;
+}
+
+.btn.primary {
+  background: #1266d6;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #0b55b7;
+}
+
+.btn.outline {
+  border: 1px solid white;
+  color: white;
+}
+
+.btn.outline:hover {
+  background: white;
+  color: #08234a;
+}
+
+
+/* =========================
+   HERO VISUAL
+========================= */
+
+.hero-visual {
+  width: 48%;
+  height: 450px;
+
+  position: relative;
+}
+
+
+/* Technology circles */
+
+.tech-circle {
+  position: absolute;
+
+  width: 72px;
+  height: 72px;
+
+  border-radius: 50%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(30, 94, 180, 0.55);
+
+  border: 1px solid rgba(255,255,255,0.25);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+  font-size: 25px;
+
+  z-index: 5;
+}
+
+.tech-circle span {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.java-circle {
+  top: 35px;
+  left: 42%;
+}
+
+.code-circle {
+  top: 5px;
+  left: 25%;
+}
+
+.database-circle {
+  top: 55px;
+  right: 8%;
+}
+
+.spring-circle {
+  top: 105px;
+  right: 0;
+}
+
+
+/* =========================
+   DEVELOPER ILLUSTRATION
+========================= */
+
+.developer {
+  position: absolute;
+
+  width: 500px;
+  height: 360px;
+
+  right: 20px;
+  bottom: 20px;
+}
+
+
+/* monitors */
+
+.monitor {
+  position: absolute;
+
+  width: 145px;
+  height: 105px;
+
+  background: #102f59;
+
+  border: 5px solid #1b477b;
+
+  border-radius: 5px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+
+  padding: 14px;
+}
+
+.monitor-one {
+  left: 45px;
+  top: 95px;
+}
+
+.monitor-two {
+  left: 200px;
+  top: 100px;
+}
+
+.screen-line {
+  width: 90%;
+  height: 5px;
+
+  background: #3184e5;
+
+  margin-bottom: 8px;
+}
+
+.screen-line.short {
+  width: 55%;
+}
+
+.screen-line.small {
+  width: 40%;
+}
+
+
+/* person */
+
+.person {
+  position: absolute;
+
+  left: 265px;
+  top: 150px;
+
+  width: 130px;
+  height: 180px;
+}
+
+.head {
+  width: 48px;
+  height: 55px;
+
+  background: #e5a87c;
+
+  border-radius: 50%;
+
+  position: absolute;
+
+  left: 38px;
+  top: 0;
+}
+
+.body {
+  width: 90px;
+  height: 130px;
+
+  background: #17283d;
+
+  border-radius: 40px 40px 10px 10px;
+
+  position: absolute;
+
+  left: 18px;
+  top: 48px;
+}
+
+.arm {
+  position: absolute;
+
+  width: 90px;
+  height: 18px;
+
+  background: #e5a87c;
+
+  border-radius: 20px;
+
+  top: 105px;
+  left: -5px;
+
+  transform: rotate(-15deg);
+}
+
+
+/* desk */
+
+.desk {
+  position: absolute;
+
+  left: 60px;
+  bottom: 35px;
+
+  width: 400px;
+  height: 18px;
+
+  background: #142f54;
+
+  border-radius: 3px;
+}
+
+.chair {
+  position: absolute;
+
+  width: 85px;
+  height: 145px;
+
+  right: 20px;
+  bottom: 5px;
+
+  background: #101d31;
+
+  border-radius: 30px 30px 10px 10px;
+}
+
+
+/* =========================
+   WAVE
+========================= */
+
+.hero-wave {
+  position: absolute;
+
+  bottom: -1px;
+  left: -5%;
+
+  width: 110%;
+  height: 65px;
+
+  background: white;
+
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+
+/* =========================
+   WHY SECTION
+========================= */
+
+.why-section {
+  background: white;
+
+  padding: 15px 0 50px;
+
+  position: relative;
+  z-index: 10;
+}
+
+.section-heading {
+  text-align: center;
+
+  margin-bottom: 28px;
+}
+
+.section-heading h2 {
+  margin: 0;
+
+  font-size: 24px;
+
+  color: #152238;
+}
+
+
+/* =========================
+   WHY CARDS
+========================= */
+
+.why-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 22px;
+}
+
+.why-card {
+  background: white;
+
+  min-height: 140px;
+
+  border: 1px solid #e7ebf0;
+
+  border-radius: 7px;
+
+  padding: 20px;
+
+  text-align: center;
+
+  box-shadow:
+    0 3px 15px rgba(0,0,0,0.05);
+
+  transition: 0.3s;
+}
+
+.why-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.1);
+}
+
+.why-icon {
+  font-size: 30px;
+
+  margin-bottom: 8px;
+
+  color: #1266d6;
+}
+
+.why-card h3 {
+  margin: 5px 0 8px;
+
+  font-size: 15px;
+
+  color: #152238;
+}
+
+.why-card p {
+  margin: 0;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+
+  color: #667085;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .developer {
+    transform: scale(0.8);
+    transform-origin: right bottom;
+  }
+
+}
+
+
+@media (max-width: 768px) {
+
+  .navbar {
+    height: 65px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+
+  .hero-container {
+    flex-direction: column;
+
+    text-align: center;
+
+    min-height: auto;
+  }
+
+  .hero-content {
+    width: 100%;
+
+    padding: 60px 0 20px;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+  }
+
+  .hero p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-visual {
+    width: 100%;
+
+    height: 350px;
+  }
+
+  .developer {
+    transform: scale(0.65);
+
+    transform-origin: center bottom;
+
+    right: 50%;
+
+    transform:
+      translateX(50%)
+      scale(0.65);
+  }
+
+  .why-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .container {
+    width: 90%;
+  }
+
+  .logo {
+    font-size: 17px;
+  }
+
+  .logo-icon {
+    font-size: 25px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-visual {
+    height: 300px;
+  }
+
+}

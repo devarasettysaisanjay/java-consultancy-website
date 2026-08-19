@@ -1,0 +1,235 @@
+<!-- PAGE HEADER -->
+<p>Hi</p>
+<section class="page-header">
+
+  <div class="container">
+
+    <p class="breadcrumb">
+      Home / Courses / {{ course?.title }}
+    </p>
+
+    <h1>
+      {{ course?.icon }}
+      {{ course?.title }}
+    </h1>
+
+    <p class="header-description">
+      {{ course?.description }}
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- COURSE DETAILS -->
+
+<section class="course-section">
+
+  <div class="container course-grid">
+
+
+    <!-- LEFT SIDE -->
+
+    <div class="course-content">
+
+      <div class="content-card">
+
+        <h2>
+          Course Overview
+        </h2>
+
+        <p>
+          {{ course?.description }}
+        </p>
+
+        <p>
+          This course is designed to provide practical,
+          industry-oriented knowledge with hands-on examples
+          and real-world projects.
+        </p>
+
+      </div>
+
+
+      <!-- WHAT YOU WILL LEARN -->
+
+      <div class="content-card">
+
+        <h2>
+          What You Will Learn
+        </h2>
+
+        <div class="topics">
+
+          <div
+            class="topic"
+            *ngFor="let item of course?.contents">
+
+            <span class="check">
+              ✓
+            </span>
+
+            <span>
+              {{ item }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- WHO SHOULD JOIN -->
+
+      <div class="content-card">
+
+        <h2>
+          Who Should Join?
+        </h2>
+
+        <ul>
+
+          <li>
+            Freshers looking for a Java career
+          </li>
+
+          <li>
+            Working professionals wanting to upgrade skills
+          </li>
+
+          <li>
+            Developers preparing for interviews
+          </li>
+
+          <li>
+            Students looking for practical industry knowledge
+          </li>
+
+        </ul>
+
+      </div>
+
+
+      <!-- SUPPORT -->
+
+      <div class="content-card">
+
+        <h2>
+          What You Get
+        </h2>
+
+        <div class="benefits">
+
+          <div>
+            👨‍🏫
+            Expert Training
+          </div>
+
+          <div>
+            💻
+            Hands-on Projects
+          </div>
+
+          <div>
+            🎯
+            Interview Preparation
+          </div>
+
+          <div>
+            📜
+            Course Certificate
+          </div>
+
+          <div>
+            💼
+            Job Support
+          </div>
+
+          <div>
+            📚
+            Study Material
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+
+    <div class="course-sidebar">
+
+      <div class="price-card">
+
+        <div class="course-icon">
+
+          {{ course?.icon }}
+
+        </div>
+
+
+        <h2>
+          {{ course?.title }}
+        </h2>
+
+
+        <div class="price">
+
+          ₹{{ course?.fee | number }}
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span>
+            Duration
+          </span>
+
+          <strong>
+            {{ course?.duration }}
+          </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span>
+            Level
+          </span>
+
+          <strong>
+            {{ course?.level }}
+          </strong>
+
+        </div>
+
+
+        <hr>
+
+
+        <button
+          class="enroll-btn"
+          (click)="enroll()">
+
+          Enroll Now →
+
+        </button>
+
+
+        <p class="secure">
+          🔒 Secure Enrollment
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

@@ -1,0 +1,71 @@
+.service-card {
+  background: #ffffff;
+  border: 1px solid #e4e8ee;
+  border-radius: 10px;
+  padding: 22px;
+  min-height: 190px;
+
+  display: flex;
+  align-items: flex-start;
+
+  transition: all 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.service-icon {
+  width: 55px;
+  min-width: 55px;
+  height: 55px;
+
+  border-radius: 50%;
+
+  background: #f5f7fa;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 30px;
+
+  margin-right: 18px;
+}
+
+.service-content {
+  flex: 1;
+}
+
+.service-content h3 {
+  margin: 0 0 12px;
+
+  color: #102a43;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.service-content p {
+  margin: 0 0 18px;
+
+  color: #555;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.details {
+  color: #0866d6;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.details:hover {
+  text-decoration: underline;
+}

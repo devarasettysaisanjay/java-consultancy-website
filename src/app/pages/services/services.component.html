@@ -1,0 +1,230 @@
+<!-- PAGE HEADER -->
+
+<section class="page-header">
+
+  <div class="container">
+
+    <h1>Our Services</h1>
+
+    <div class="breadcrumb">
+      <a routerLink="/">Home</a>
+      <span>/</span>
+      <span>Services</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SERVICES -->
+
+<section class="services-section">
+
+  <div class="container">
+
+    <p class="services-intro">
+      We offer a wide range of Java development and training services.
+    </p>
+
+
+    <div class="services-grid">
+
+
+      <!-- CORE JAVA -->
+
+      <div
+        class="service-box"
+        *ngFor="let service of services">
+
+        <div class="service-title">
+
+          <h2>
+            {{ service.name }}
+          </h2>
+
+        </div>
+
+
+        <div class="service-body">
+
+          <div class="overview">
+
+            <h3>
+              Overview
+            </h3>
+
+            <div class="overview-content">
+
+              <p>
+                {{ service.overview }}
+              </p>
+
+              <div class="service-icon">
+
+                {{ service.icon }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="contents">
+
+            <h3>
+              Contents
+            </h3>
+
+            <ul>
+
+              <li
+                *ngFor="let item of service.contents">
+
+                <span class="check">
+                  ✓
+                </span>
+
+                <span>
+                  {{ item }}
+                </span>
+
+              </li>
+
+            </ul>
+
+          </div>
+
+
+          <div class="enquire">
+
+            <a
+              [routerLink]="['/services', service.slug]"
+              class="enquire-btn">
+
+              Enquire Now
+
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- FEATURES CARD -->
+
+      <div class="service-box features-box">
+
+        <div class="service-title">
+
+          <h2>
+            Features
+          </h2>
+
+        </div>
+
+
+        <div class="feature-list">
+
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              👨‍🏫
+            </div>
+
+            <div>
+
+              <h3>
+                Expert Trainers
+              </h3>
+
+              <p>
+                Learn from industry experts with
+                real-time experience.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              📚
+            </div>
+
+            <div>
+
+              <h3>
+                Hands-on Projects
+              </h3>
+
+              <p>
+                Work on real projects to gain
+                practical knowledge.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              📅
+            </div>
+
+            <div>
+
+              <h3>
+                Flexible Batches
+              </h3>
+
+              <p>
+                Weekday and weekend batches
+                available.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              🏆
+            </div>
+
+            <div>
+
+              <h3>
+                Certification
+              </h3>
+
+              <p>
+                Get completion certificate for
+                every module.
+              </p>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>

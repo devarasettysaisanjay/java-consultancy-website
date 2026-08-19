@@ -1,0 +1,127 @@
+<section class="page-header">
+
+  <div class="container">
+
+    <h1>
+      Student Dashboard
+    </h1>
+
+    <p>
+      Home / Dashboard
+    </p>
+
+  </div>
+
+</section>
+
+
+<section class="dashboard">
+
+  <div class="container">
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong>{{ enrolledCourses }}</strong>
+        <span>Enrolled Courses</span>
+      </div>
+
+      <div class="stat">
+        <strong>{{ upcomingClasses }}</strong>
+        <span>Upcoming Classes</span>
+      </div>
+
+      <div class="stat">
+        <strong>{{ completedCourses }}</strong>
+        <span>Completed Courses</span>
+      </div>
+
+      <div class="stat">
+        <strong>{{ certificates }}</strong>
+        <span>Certificates</span>
+      </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+      <aside>
+
+        <a routerLink="/dashboard">
+          Dashboard
+        </a>
+
+        <a routerLink="/dashboard/my-courses">
+          My Courses
+        </a>
+
+        <a>
+          Upcoming Classes
+        </a>
+
+        <a>
+          Recordings
+        </a>
+
+        <a>
+          Assignments
+        </a>
+
+        <a>
+          Certificates
+        </a>
+
+        <a>
+          Profile Settings
+        </a>
+
+      </aside>
+
+
+      <main>
+
+        <h2>
+          My Courses
+        </h2>
+
+
+        <div
+          class="course-progress"
+          *ngFor="let course of courses">
+
+          <div class="progress-header">
+
+            <strong>
+              {{ course.name }}
+            </strong>
+
+            <span>
+              {{ course.progress }}%
+            </span>
+
+          </div>
+
+
+          <div class="progress">
+
+            <div
+              [style.width.%]="course.progress">
+            </div>
+
+          </div>
+
+
+          <button>
+            Continue
+          </button>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+</section>
