@@ -1,0 +1,331 @@
+<div class="register-page">
+
+  <section class="register-section">
+
+    <div class="register-container">
+
+      <!-- LEFT CARD -->
+      <div class="benefits-card">
+
+        <div class="journey-label">
+          Start Your Learning Journey
+        </div>
+
+        <h1>
+          New to <span>AshokIT?</span>
+        </h1>
+
+        <p class="intro">
+          Register today and unlock career-focused learning
+          with real-time project experience.
+        </p>
+
+        <div class="benefit-list">
+
+          <div class="benefit">
+            <div class="benefit-icon">👤</div>
+            <p>
+              One-click apply using your AshokIT profile.
+            </p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit-icon">💼</div>
+            <p>
+              Learn from experienced industry professionals.
+            </p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit-icon">&lt;/&gt;</div>
+            <p>
+              Gain hands-on experience with real-world projects.
+            </p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit-icon">📜</div>
+            <p>
+              Earn a certificate after successful course completion.
+            </p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit-icon">👨‍💻</div>
+            <p>
+              Get career counseling and job placement assistance.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="illustration-container">
+          <div class="illustration">
+            👨‍💻
+          </div>
+
+          <div class="screen">
+            🔒
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT CARD -->
+      <div class="form-card">
+
+        <h2>Register Here</h2>
+
+        <p class="form-subtitle">
+          Create your AshokIT student account
+        </p>
+
+        <form
+          #registerForm="ngForm"
+          (ngSubmit)="register()"
+        >
+
+          <!-- FULL NAME -->
+          <div class="form-group">
+
+            <label>
+              Full Name <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              name="fullName"
+              [(ngModel)]="user.fullName"
+              required
+              placeholder="Enter your full name"
+            />
+
+          </div>
+
+          <!-- EMAIL -->
+          <div class="form-group">
+
+            <label>
+              Email Address <span>*</span>
+            </label>
+
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="user.email"
+              required
+              placeholder="Enter your email address"
+            />
+
+            <small>
+              Password will be sent to this email for login.
+            </small>
+
+          </div>
+
+          <!-- GENDER -->
+          <div class="form-group">
+
+            <label>
+              Gender <span>*</span>
+            </label>
+
+            <div class="gender-container">
+
+              <label class="gender-option">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  [(ngModel)]="user.gender"
+                  required
+                />
+                <span>Male</span>
+              </label>
+
+              <label class="gender-option">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  [(ngModel)]="user.gender"
+                />
+                <span>Female</span>
+              </label>
+
+            </div>
+
+          </div>
+
+          <!-- COUNTRY -->
+          <div class="form-group">
+
+            <label>
+              Country Code <span>*</span>
+            </label>
+
+            <select
+              name="countryCode"
+              [(ngModel)]="user.countryCode"
+              required
+            >
+
+              <option value="+91">India (+91)</option>
+              <option value="+1">USA (+1)</option>
+              <option value="+44">UK (+44)</option>
+
+            </select>
+
+          </div>
+
+          <!-- WHATSAPP -->
+          <div class="form-group">
+
+            <label>
+              WhatsApp Number <span>*</span>
+            </label>
+
+            <div class="whatsapp-input">
+
+              <span>◉</span>
+
+              <input
+                type="text"
+                name="whatsapp"
+                [(ngModel)]="user.whatsapp"
+                required
+                placeholder="Enter WhatsApp number"
+              />
+
+            </div>
+
+            <small>
+              OTP will be sent to this WhatsApp number for verification.
+            </small>
+
+          </div>
+
+          <!-- BUTTON -->
+          <button
+            type="submit"
+            class="register-btn"
+            [disabled]="!registerForm.valid"
+          >
+            Register Now
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <div class="footer-container">
+
+      <div class="footer-column about">
+
+        <div class="footer-logo">
+          <span class="logo-icon">A</span>
+          <span>ASHOK IT</span>
+        </div>
+
+        <p>
+          Mr. Ashok Bollepalli, the visionary behind Ashok IT,
+          brings a wealth of experience in Information Technology.
+          With a commitment to excellence and innovation, he has
+          established Ashok IT as a leader in software training,
+          dedicated to equipping the next generation of tech
+          professionals with the skills needed to succeed.
+        </p>
+
+      </div>
+
+      <div class="footer-column">
+
+        <h3>QUICK LINKS</h3>
+
+        <a href="#">News & Events</a>
+        <a href="#">Interview Questions</a>
+        <a href="#">Online Batches</a>
+        <a href="#">Contact Us</a>
+        <a href="#">About Us</a>
+        <a href="#">Hire From Us</a>
+
+      </div>
+
+      <div class="footer-column">
+
+        <h3>OUR POLICIES</h3>
+
+        <a href="#">Pricing Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Refund Policy</a>
+
+      </div>
+
+      <div class="footer-column">
+
+        <h3>TRENDING COURSES</h3>
+
+        <a href="#">Fullstack Development</a>
+        <a href="#">DSA</a>
+        <a href="#">DevOps with AWS</a>
+        <a href="#">Cloud Computing</a>
+        <a href="#">Spring Boot & Microservices</a>
+        <a href="#">Gen AI</a>
+
+      </div>
+
+      <div class="footer-column contact">
+
+        <h3>CONTACT US</h3>
+
+        <p>📞 +91 9985396677</p>
+
+        <p>✉ info@ashokit.in</p>
+
+        <p>
+          📍 5th Floor, Swathi anukar complex,
+          Beside Aditya Trade Center,
+          Ameerpet, Hyderabad,
+          Telangana 500016.
+        </p>
+
+        <a class="whatsapp-link">
+          Click Here To Join Our WhatsApp Group
+          For Latest Updates
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="social-section">
+
+      <strong>FOLLOW US :</strong>
+
+      <span>◉</span>
+      <span>◎</span>
+      <span>●</span>
+      <span>▶</span>
+      <span>in</span>
+
+    </div>
+
+    <div class="copyright">
+      © 2025 Copyright, Ashok IT
+    </div>
+
+  </footer>
+
+  <div class="whatsapp-float">
+    ☎
+  </div>
+
+</div>

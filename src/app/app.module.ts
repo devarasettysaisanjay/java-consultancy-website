@@ -11,7 +11,6 @@ import { ServicesComponent } from './pages/services/services.component';
 import { ServiceDetailsComponent } from './pages/service-details/service-details.component';
 import { FeaturesComponent } from './pages/features/features.component';
 import { AboutComponent } from './pages/about/about.component';
-import { ContactComponent } from './pages/contact/contact.component';
 import { CoursesComponent } from './pages/courses/courses.component';
 import { CourseDetailsComponent } from './pages/course-details/course-details.component';
 import { EnrollComponent } from './pages/enroll/enroll.component';
@@ -21,6 +20,9 @@ import { StudentDashboardComponent } from './pages/student-dashboard/student-das
 import { MyCoursesComponent } from './pages/my-courses/my-courses.component';
 import { InterviewSupportComponent } from './pages/interview-support/interview-support.component';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,6 @@ import { FormsModule } from '@angular/forms';
 
     AboutComponent,
 
-    ContactComponent,
      CoursesComponent,
      CourseDetailsComponent,
      EnrollComponent,
@@ -50,7 +51,10 @@ import { FormsModule } from '@angular/forms';
      BatchesComponent,
      StudentDashboardComponent,
      MyCoursesComponent,
-     InterviewSupportComponent
+     InterviewSupportComponent,
+     LoginComponent,
+     RegisterComponent,
+     ContactUsComponent
   ],
   imports: [
     BrowserModule,

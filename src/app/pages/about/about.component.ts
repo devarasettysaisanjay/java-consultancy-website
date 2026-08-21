@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-about',
@@ -7,4 +8,17 @@ import { Component } from '@angular/core';
 })
 export class AboutComponent {
 
+
+  constructor(private router: Router){
+
+  }
+
+   goToEnquiry(): void {
+    this.router.navigate(['/enquiry']);
+  }
+
+
+   goToCourses(): void {
+    this.router.navigate(['/courses']);
+  }
 }
