@@ -1,23 +1,130 @@
 <div class="login-page">
 
-  <!-- Main Content -->
-  <div class="main-container">
+  <!-- =========================
+       SIMPLE HEADER
+  ========================== -->
+  <header class="simple-header">
 
-    <!-- LEFT SECTION -->
-    <div class="left-section">
+    <div class="logo-section">
+
+      <div class="logo-text">
+        <span class="java-logo">Java</span><span class="bridge-logo">Bridge</span>
+      </div>
+
+      <small>
+        JAVA CONSULTANCY
+      </small>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       MAIN CONTENT
+  ========================== -->
+  <main class="main-container">
+
+
+    <!-- =========================
+         LEFT SECTION
+    ========================== -->
+    <section class="left-section">
 
       <div class="promotion-card">
 
-        <!-- Java Poster -->
+
+        <!-- =========================
+             JAVA CODE EDITOR
+        ========================== -->
         <div class="poster-container">
-          <img
-            src="assets/about/login/java-poster.png"
-            alt="Java Programming Training"
-            class="java-poster"
-          />
+
+          <div class="code-editor">
+
+
+            <!-- EDITOR HEADER -->
+            <div class="editor-header">
+
+              <div class="window-buttons">
+
+                <span class="red"></span>
+                <span class="yellow"></span>
+                <span class="green"></span>
+
+              </div>
+
+              <span class="file-name">
+                HelloWorld.java
+              </span>
+
+            </div>
+
+
+            <!-- =========================
+                 CODE AREA
+            ========================== -->
+            <div class="code-area">
+
+
+              <!-- LINE NUMBERS -->
+              <div class="line-numbers">
+
+                <span>01</span>
+                <span>02</span>
+                <span>03</span>
+                <span>04</span>
+                <span>05</span>
+                <span>06</span>
+                <span>07</span>
+                <span>08</span>
+                <span>09</span>
+
+              </div>
+
+
+              <!-- AUTOMATIC TYPING CODE -->
+              <div class="java-code typing-code">
+
+                <pre>{{ typedCode }}<span class="typing-cursor"></span></pre>
+
+              </div>
+
+
+            </div>
+
+
+            <!-- =========================
+                 JAVA BRANDING
+            ========================== -->
+            <div class="java-branding">
+
+              <div class="java-symbol">
+                ☕
+              </div>
+
+              <div class="java-brand-text">
+
+                <h2>
+                  MASTER JAVA
+                </h2>
+
+                <p>
+                  LEARN • CODE • BUILD
+                </p>
+
+              </div>
+
+            </div>
+
+
+          </div>
+
         </div>
 
-        <!-- Welcome Box -->
+
+        <!-- =========================
+             WELCOME BOX
+        ========================== -->
         <div class="welcome-box">
 
           <span class="welcome-tag">
@@ -29,27 +136,36 @@
           </h1>
 
           <p>
-            Continue your learning journey. Access your enrolled courses,
-            class videos, notes, assignments and important updates.
+            Continue your learning journey.
+            Access your enrolled courses,
+            class videos, notes, assignments
+            and important updates.
           </p>
 
         </div>
 
+
       </div>
 
-    </div>
+    </section>
 
 
-    <!-- RIGHT LOGIN SECTION -->
-    <div class="right-section">
+
+    <!-- =========================
+         RIGHT LOGIN SECTION
+    ========================== -->
+    <section class="right-section">
 
       <div class="login-card">
 
-        <!-- Lock Icon -->
+
+        <!-- LOCK ICON -->
         <div class="lock-circle">
           🔐
         </div>
 
+
+        <!-- LOGIN HEADING -->
         <h2>
           Student Login
         </h2>
@@ -59,7 +175,9 @@
         </p>
 
 
-        <!-- Email -->
+        <!-- =========================
+             EMAIL
+        ========================== -->
         <div class="form-group">
 
           <label>
@@ -84,7 +202,9 @@
         </div>
 
 
-        <!-- Password -->
+        <!-- =========================
+             PASSWORD
+        ========================== -->
         <div class="form-group">
 
           <label>
@@ -109,13 +229,14 @@
         </div>
 
 
-        <!-- Links -->
+        <!-- =========================
+             LOGIN LINKS
+        ========================== -->
         <div class="login-links">
 
-        <a routerLink="/create-account">
-  Create Account
-</a>
-
+          <a routerLink="/create-account">
+            Create Account
+          </a>
 
           <a href="#">
             Forgot Password?
@@ -124,18 +245,23 @@
         </div>
 
 
-        <!-- Login Button -->
+        <!-- =========================
+             LOGIN BUTTON
+        ========================== -->
         <button
+          type="button"
           class="login-now-btn"
           (click)="login()"
         >
           Login Now
         </button>
 
+
       </div>
 
-    </div>
+    </section>
 
-  </div>
+
+  </main>
 
 </div>

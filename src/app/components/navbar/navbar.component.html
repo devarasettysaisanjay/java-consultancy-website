@@ -2,71 +2,151 @@
 
   <div class="nav-container">
 
-    <!-- Logo -->
+    <!-- =========================
+         LOGO
+    ========================== -->
     <a routerLink="/" class="logo">
 
-      <span class="logo-icon">☕</span>
+      <div class="logo-icon">
+        ☕
+      </div>
 
-      <span class="logo-text">
-        JavaBridge Consultancy<span></span>
-      </span>
+      <div class="logo-content">
+        <span class="logo-main">
+          JavaBridge
+        </span>
+
+        <span class="logo-subtitle">
+          Consultancy
+        </span>
+      </div>
 
     </a>
 
 
-    <!-- Desktop Menu -->
-    <div class="nav-menu">
+    <!-- =========================
+         MOBILE MENU BUTTON
+    ========================== -->
+    <button
+      type="button"
+      class="mobile-menu-btn"
+      aria-label="Toggle navigation"
+      (click)="isMenuOpen = !isMenuOpen"
+    >
 
+      <span
+        [class.open]="isMenuOpen">
+      </span>
+
+      <span
+        [class.open]="isMenuOpen">
+      </span>
+
+      <span
+        [class.open]="isMenuOpen">
+      </span>
+
+    </button>
+
+
+    <!-- =========================
+         NAVIGATION MENU
+    ========================== -->
+    <div
+      class="nav-menu"
+      [class.mobile-open]="isMenuOpen"
+    >
+
+
+      <!-- Home -->
       <a
         routerLink="/"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
-        Home
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="isMenuOpen = false"
+      >
+        <span class="nav-icon">⌂</span>
+        <span>Home</span>
       </a>
 
+
+      <!-- Services -->
       <a
         routerLink="/services"
-        routerLinkActive="active">
-        Services
+        routerLinkActive="active"
+        (click)="isMenuOpen = false"
+      >
+        <span class="nav-icon">⚙</span>
+        <span>Services</span>
       </a>
 
-       <a
+
+      <!-- Courses -->
+      <a
         routerLink="/courses"
-        routerLinkActive="active">
-        Courses
+        routerLinkActive="active"
+        (click)="isMenuOpen = false"
+      >
+        <span class="nav-icon">▣</span>
+        <span>Courses</span>
       </a>
 
 
-
+      <!-- Features -->
       <a
         routerLink="/features"
-        routerLinkActive="active">
-        Features
+        routerLinkActive="active"
+        (click)="isMenuOpen = false"
+      >
+        <span class="nav-icon">✦</span>
+        <span>Features</span>
       </a>
 
+
+      <!-- About -->
       <a
         routerLink="/about"
-        routerLinkActive="active">
-        About
+        routerLinkActive="active"
+        (click)="isMenuOpen = false"
+      >
+        <span class="nav-icon">ⓘ</span>
+        <span>About</span>
       </a>
 
+
+      <!-- Contact -->
       <a
         routerLink="/contact-us"
-        routerLinkActive="active">
-        Contact
+        routerLinkActive="active"
+        (click)="isMenuOpen = false"
+      >
+        <span class="nav-icon">✉</span>
+        <span>Contact</span>
       </a>
 
+
+      <!-- Get In Touch -->
       <a
         routerLink="/contact"
-        class="nav-button">
-        Get In Touch
+        class="nav-button"
+        (click)="isMenuOpen = false"
+      >
+        <span>Get In Touch</span>
+        <span class="button-arrow">→</span>
       </a>
 
-       <a
+
+      <!-- Login -->
+      <a
         routerLink="/login"
-        routerLinkActive="active">
-        Login
+        routerLinkActive="active"
+        class="login-link"
+        (click)="isMenuOpen = false"
+      >
+        <span class="login-icon">↪</span>
+        <span>Login</span>
       </a>
+
 
     </div>
 

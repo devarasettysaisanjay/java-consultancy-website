@@ -7,14 +7,16 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponent {
 
-   menuOpen = false;
+  //  menuOpen = false;
 
-  toggleMenu(): void {
-    this.menuOpen = !this.menuOpen;
-  }
+  // toggleMenu(): void {
+  //   this.menuOpen = !this.menuOpen;
+  // }
 
-  closeMenu(): void {
-    this.menuOpen = false;
-  }
+  // closeMenu(): void {
+  //   this.menuOpen = false;
+  // }
+
+   isMenuOpen = false;
 
 }
