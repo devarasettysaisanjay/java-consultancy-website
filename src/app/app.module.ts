@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { ChatagentComponent } from './chatagent/chatagent.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
      InterviewSupportComponent,
      LoginComponent,
      RegisterComponent,
-     ContactUsComponent
+     ContactUsComponent,
+     ChatagentComponent
   ],
   imports: [
     BrowserModule,

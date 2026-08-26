@@ -120,6 +120,7 @@
   transform:
     translateY(-2px)
     rotate(-3deg);
+    
 
   box-shadow:
     0 10px 24px
@@ -198,7 +199,7 @@
 
   justify-content: flex-end;
 
-  gap: 7px;
+  gap: 5px;
 
 }
 
