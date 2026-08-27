@@ -11,8 +11,11 @@ import { RazorPaymentServiceService } from 'src/app/razor-payment-service.servic
   styleUrls: ['./enroll.component.css']
 })
 export class EnrollComponent {
-course!: Course;
+// course!: Course;
  
+
+
+
 //   student = {
 //     fullName: '',
 //     email: '',
@@ -25,34 +28,42 @@ course!: Course;
 
 //   constructor(
 //     private route: ActivatedRoute,
-//     private router: Router,  private paymentService :RazorPaymentServiceService
+//     private router: Router,
+//     private paymentService: RazorPaymentServiceService
 //   ) {}
 
 //   ngOnInit(): void {
 
-//     console.log("hello i am their");
-//     const slug =
-//       this.route.snapshot.paramMap.get('slug');
+//     console.log('Enroll page loaded');
 
-//     this.course = COURSES.find(
+//     var slug = this.route.snapshot.paramMap.get('slug');
+
+//        this.course = COURSES.find(
 //       c => c.slug === slug
-//     )!;
+//      )!;
 
+//     console.log('Course:', this.course);
 //   }
-// proceedToPayment(): void {
-// var Razorpay: any;
-//     const amount = 5000; // Example: ₹5,000
 
-//     this.paymentService.createOrder(amount)
+
+//   proceedToPayment(): void {
+
+   
+
+//     console.log('Creating Razorpay order...');
+
+//     this.paymentService.createOrder(this.course.fee)
 //       .subscribe(
 //         (order: any) => {
+
+//           console.log('Order created:', order);
 
 //           this.openRazorpay(order);
 
 //         },
 //         (error) => {
 
-//           console.error(error);
+//           console.error('Create order error:', error);
 
 //           alert('Unable to start payment');
 
@@ -62,9 +73,27 @@ course!: Course;
 
 
 //   openRazorpay(order: any): void {
-//     var Razorpay: any;
 
-//     const options = {
+//     console.log('Opening Razorpay...');
+//     console.log('Order:', order);
+
+//     var Razorpay = (window as any).Razorpay;
+
+//     if (!Razorpay) {
+
+//       alert(
+//         'Razorpay SDK is not loaded. Please check index.html.'
+//       );
+
+//       console.error(
+//         'Razorpay SDK not found'
+//       );
+
+//       return;
+//     }
+
+
+//     var options = {
 
 //       key: order.key,
 
@@ -99,18 +128,27 @@ course!: Course;
 //         );
 
 
-//         // Send payment details to Spring Boot
 //         this.verifyPayment(response);
+
 //       },
 
 
 //       prefill: {
 
-//         name: 'Student Name',
+//         name: this.student.fullName,
 
-//         email: 'student@gmail.com',
+//         email: this.student.email,
 
-//         contact: '9876543210'
+//         contact: this.student.mobile
+
+//       },
+
+
+//       notes: {
+
+//         course: this.course ? this.course.title : '',
+
+//         studentName: this.student.fullName
 
 //       },
 
@@ -119,38 +157,92 @@ course!: Course;
 
 //         color: '#2563eb'
 
+//       },
+
+
+//       modal: {
+
+//         ondismiss: () => {
+
+//           console.log(
+//             'Razorpay payment window closed'
+//           );
+
+//         }
+
 //       }
 
 //     };
 
-//     const razorpay = new Razorpay(options);
 
-//     razorpay.open();
+//     try {
+
+//       var razorpay = new Razorpay(options);
+
+      
+
+//       razorpay.open();
+
+//     } catch (error) {
+
+//       console.error(
+//         'Razorpay open error:',
+//         error
+//       );
+
+//       alert(
+//         'Unable to open Razorpay payment window'
+//       );
+
+//     }
+
 //   }
 
 
 //   verifyPayment(response: any): void {
 
+//     console.log(
+//       'Sending payment details to backend...'
+//     );
+
 //     this.paymentService.verifyPayment(response)
 //       .subscribe(
+
 //         (result: any) => {
 
-//           alert('Payment successful!');
+//           console.log(
+//             'Payment verification response:',
+//             result
+//           );
 
-//           console.log(result);
+//           alert(
+//             'Payment successful!'
+//           );
 
 //         },
+
 //         (error) => {
 
-//           console.error(error);
+//           console.error(
+//             'Payment verification failed:',
+//             error
+//           );
 
-//           alert('Payment verification failed');
+//           alert(
+//             'Payment verification failed'
+//           );
 
 //         }
+
 //       );
+
 //   }
 
 
+course!: Course;
+
+  paymentProcessing = false;
+  paymentVerified = false;
 
   student = {
     fullName: '',
@@ -174,35 +266,87 @@ course!: Course;
 
     var slug = this.route.snapshot.paramMap.get('slug');
 
-       this.course = COURSES.find(
+    this.course = COURSES.find(
       c => c.slug === slug
-     )!;
+    )!;
 
     console.log('Course:', this.course);
+
+    if (!this.course) {
+      alert('Course not found');
+      this.router.navigate(['/courses']);
+      return;
+    }
+
+    console.log('Course fee:', this.course.fee);
   }
 
 
   proceedToPayment(): void {
 
-    var amount = 5000;
+    if (!this.course) {
+      alert('Course details not found');
+      return;
+    }
 
-    console.log('Creating Razorpay order...');
+    if (!this.student.fullName ||
+        !this.student.email ||
+        !this.student.mobile) {
 
-    this.paymentService.createOrder(amount)
+      alert('Please fill all required student details');
+      return;
+    }
+
+    if (this.paymentProcessing) {
+      return;
+    }
+
+    console.log('Course fee in rupees:', this.course.fee);
+
+    this.paymentProcessing = true;
+
+    this.paymentService
+      .createOrder(this.course.fee)
       .subscribe(
+
         (order: any) => {
 
-          console.log('Order created:', order);
+          console.log('Order created successfully:', order);
+
+          this.paymentProcessing = false;
+
+          if (!order) {
+            alert('Invalid order response from server');
+            return;
+          }
+
+          if (!order.id) {
+            console.error('Order ID missing:', order);
+            alert('Razorpay order ID is missing');
+            return;
+          }
+
+          if (!order.amount) {
+            console.error('Order amount missing:', order);
+            alert('Razorpay order amount is missing');
+            return;
+          }
 
           this.openRazorpay(order);
-
         },
+
         (error) => {
 
-          console.error('Create order error:', error);
+          this.paymentProcessing = false;
 
-          alert('Unable to start payment');
+          console.error(
+            'Create order error:',
+            error
+          );
 
+          alert(
+            'Unable to create payment order. Please try again.'
+          );
         }
       );
   }
@@ -228,25 +372,59 @@ course!: Course;
       return;
     }
 
-
     var options = {
 
       key: order.key,
 
       amount: order.amount,
 
-      currency: 'INR',
+      currency: order.currency || 'INR',
 
       name: 'JavaBridge Consultancy',
 
-      description: 'Course Payment',
+      description:
+        this.course.title + ' Course Payment',
 
       order_id: order.id,
 
+      prefill: {
+
+        name: this.student.fullName,
+
+        email: this.student.email,
+
+        contact: this.student.mobile
+
+      },
+
+      notes: {
+
+        course:
+          this.course
+            ? this.course.title
+            : '',
+
+        studentName:
+          this.student.fullName,
+
+        studentEmail:
+          this.student.email,
+
+        studentMobile:
+          this.student.mobile
+      },
+
+      theme: {
+
+        color: '#2563eb'
+
+      },
 
       handler: (response: any) => {
 
-        console.log('Payment successful');
+        console.log(
+          'Razorpay payment completed'
+        );
 
         console.log(
           'Payment ID:',
@@ -263,38 +441,21 @@ course!: Course;
           response.razorpay_signature
         );
 
+         var paymentData = {
 
-        this.verifyPayment(response);
+    razorpayOrderId:
+      response.razorpay_payment_id,
 
+    razorpayPaymentId:
+      response.razorpay_order_id,
+
+    razorpaySignature:
+      response.razorpay_signature
+
+  };
+
+        this.verifyPayment(paymentData);
       },
-
-
-      prefill: {
-
-        name: this.student.fullName,
-
-        email: this.student.email,
-
-        contact: this.student.mobile
-
-      },
-
-
-      notes: {
-
-        course: this.course ? this.course.title : '',
-
-        studentName: this.student.fullName
-
-      },
-
-
-      theme: {
-
-        color: '#2563eb'
-
-      },
-
 
       modal: {
 
@@ -304,6 +465,7 @@ course!: Course;
             'Razorpay payment window closed'
           );
 
+          this.paymentProcessing = false;
         }
 
       }
@@ -329,17 +491,19 @@ course!: Course;
       );
 
     }
-
   }
 
 
   verifyPayment(response: any): void {
 
     console.log(
-      'Sending payment details to backend...'
+      'Verifying payment with backend...'
     );
 
-    this.paymentService.verifyPayment(response)
+    this.paymentProcessing = true;
+
+    this.paymentService
+      .verifyPayment(response)
       .subscribe(
 
         (result: any) => {
@@ -349,13 +513,32 @@ course!: Course;
             result
           );
 
+          this.paymentProcessing = false;
+
+          this.paymentVerified = true;
+
           alert(
-            'Payment successful!'
+            'Payment successful! Your enrollment is confirmed.'
           );
+
+          /*
+           * Navigate to success page.
+           *
+           * Change this route if your project
+           * uses a different success page.
+           */
+
+          this.router.navigate([
+            '/'
+          ]);
 
         },
 
         (error) => {
+
+          this.paymentProcessing = false;
+
+          this.paymentVerified = false;
 
           console.error(
             'Payment verification failed:',
@@ -363,13 +546,11 @@ course!: Course;
           );
 
           alert(
-            'Payment verification failed'
+            'Payment verification failed. Please contact support.'
           );
 
         }
-
       );
-
   }
 
   
