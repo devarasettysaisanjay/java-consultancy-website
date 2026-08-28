@@ -449,3 +449,139 @@ form label.checkbox input {
   }
 
 }
+
+
+/* ================================
+   PAYMENT PROCESSING OVERLAY
+================================ */
+
+.payment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 99999;
+}
+
+
+/* ================================
+   SPINNER CONTAINER
+================================ */
+
+.spinner-container {
+  width: 90%;
+  max-width: 380px;
+
+  padding: 35px 25px;
+
+  background: #ffffff;
+
+  border-radius: 18px;
+
+  text-align: center;
+
+  box-shadow: 0 15px 45px rgba(15, 35, 70, 0.18);
+}
+
+
+/* ================================
+   SPINNER
+================================ */
+
+.spinner {
+  width: 55px;
+  height: 55px;
+
+  margin: 0 auto 20px;
+
+  border: 5px solid #e5eaf2;
+  border-top: 5px solid #1769e0;
+
+  border-radius: 50%;
+
+  animation: paymentSpinner 0.8s linear infinite;
+}
+
+
+@keyframes paymentSpinner {
+
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* ================================
+   SPINNER TEXT
+================================ */
+
+.spinner-container h3 {
+  margin: 0 0 8px;
+
+  color: #082b5c;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+
+.spinner-container p {
+  margin: 0 0 8px;
+
+  color: #667085;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+.spinner-container span {
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+  .spinner-container {
+    width: 85%;
+    padding: 30px 20px;
+    border-radius: 15px;
+  }
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+
+    border-width: 4px;
+  }
+
+  .spinner-container h3 {
+    font-size: 19px;
+  }
+
+  .spinner-container p {
+    font-size: 13px;
+  }
+
+}

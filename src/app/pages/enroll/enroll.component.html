@@ -1,3 +1,4 @@
+<!-- Page Header -->
 <section class="page-header">
 
   <div class="container">
@@ -15,10 +16,39 @@
 </section>
 
 
+<!-- Payment Processing Spinner -->
+<div
+  class="payment-overlay"
+  *ngIf="paymentProcessing">
+
+  <div class="spinner-container">
+
+    <div class="spinner"></div>
+
+    <h3>
+      Processing Payment...
+    </h3>
+
+    <p>
+      Please wait while we verify your payment.
+    </p>
+
+    <span>
+      Do not close or refresh this page.
+    </span>
+
+  </div>
+
+</div>
+
+
+<!-- Enrollment Section -->
 <section class="enroll-section">
 
   <div class="container enroll-grid">
 
+
+    <!-- Enrollment Form -->
     <div class="form-card">
 
       <h2>
@@ -29,6 +59,8 @@
         #form="ngForm"
         (ngSubmit)="proceedToPayment()">
 
+
+        <!-- Full Name -->
         <label>
           Full Name *
         </label>
@@ -37,9 +69,11 @@
           type="text"
           name="fullName"
           [(ngModel)]="student.fullName"
-          required>
+          required
+          placeholder="Enter your full name">
 
 
+        <!-- Email -->
         <label>
           Email Address *
         </label>
@@ -48,9 +82,11 @@
           type="email"
           name="email"
           [(ngModel)]="student.email"
-          required>
+          required
+          placeholder="Enter your email">
 
 
+        <!-- Mobile -->
         <label>
           Mobile Number *
         </label>
@@ -59,9 +95,11 @@
           type="text"
           name="mobile"
           [(ngModel)]="student.mobile"
-          required>
+          required
+          placeholder="Enter your mobile number">
 
 
+        <!-- Experience -->
         <label>
           Experience
         </label>
@@ -93,6 +131,7 @@
         </select>
 
 
+        <!-- Current Status -->
         <label>
           Current Status
         </label>
@@ -120,6 +159,7 @@
         </select>
 
 
+        <!-- How Found Us -->
         <label>
           How did you find us?
         </label>
@@ -151,20 +191,25 @@
         </select>
 
 
+        <!-- Message -->
         <label>
           Message
         </label>
 
         <textarea
           name="message"
-          [(ngModel)]="student.message">
+          [(ngModel)]="student.message"
+          placeholder="Enter your message">
         </textarea>
 
 
+        <!-- Terms -->
         <label class="checkbox">
 
           <input
             type="checkbox"
+            name="terms"
+            ngModel
             required>
 
           I agree to the Terms & Conditions
@@ -172,12 +217,19 @@
         </label>
 
 
+        <!-- Payment Button -->
         <button
           type="submit"
           class="payment-btn"
-          [disabled]="form.invalid">
+          [disabled]="form.invalid || paymentProcessing">
 
-          Proceed to Payment
+          <span *ngIf="!paymentProcessing">
+            Proceed to Payment
+          </span>
+
+          <span *ngIf="paymentProcessing">
+            Processing...
+          </span>
 
         </button>
 
@@ -186,49 +238,60 @@
     </div>
 
 
+    <!-- Order Summary -->
     <div class="order-card">
 
       <h2>
         Order Summary
       </h2>
 
+
       <h3>
         {{ course?.icon }}
         {{ course?.title }}
       </h3>
 
+
       <p>
         {{ course?.duration }}
       </p>
 
+
       <hr>
 
+
+      <!-- Course Fee -->
       <div class="summary-row">
 
         <span>
           Course Fee
         </span>
 
-   <strong>
-  ₹{{ course.fee }}
-</strong>
+        <strong>
+          ₹{{ this.course.fee }}
+        </strong>
 
       </div>
 
+
+      <!-- GST -->
       <div class="summary-row">
 
         <span>
           GST (18%)
         </span>
 
-      <strong>
-  ₹{{ course.fee* 0.18 }}
+        <<strong>
+  ₹{{ getGst()}
 </strong>
 
       </div>
 
+
       <hr>
 
+
+      <!-- Total -->
       <div class="total">
 
         <span>
@@ -236,8 +299,9 @@
         </span>
 
         <strong>
-  ₹{{ course.fee+ ( course.fee*0.18) }}
-</strong>
+          ₹{{ this.course.fee + (this.course.fee *0.18) }}
+        </strong>
+
       </div>
 
     </div>
