@@ -11,7 +11,7 @@ export const COURSES: Course[] = [
     duration: '8 Weeks',
     level: 'Beginner',
     mode: 'Online',
-    fee: 5,
+    fee: 1,
     icon: '☕',
 
     features: [

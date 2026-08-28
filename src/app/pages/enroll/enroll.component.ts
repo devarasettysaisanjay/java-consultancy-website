@@ -164,6 +164,8 @@ export class EnrollComponent implements OnInit {
         color: '#2563eb'
       },
       handler: (response: any) => {
+          console.log('RAZORPAY SUCCESS HANDLER CALLED');
+          console.log('Payment response:', response);
         // Mark success FIRST so a late-firing ondismiss doesn't reset paymentProcessing
         this.paymentSucceeded = true;
 
