@@ -16,6 +16,8 @@ export class EnrollComponent {
   paymentProcessing = false;
   paymentVerified = false;
 
+  paymentDetails: any = null;
+
   student = {
     fullName: '',
     email: '',
@@ -58,6 +60,10 @@ export class EnrollComponent {
       this.course.fee
     );
   }
+
+  goToCourses(): void {
+  this.router.navigate(['/courses']);
+}
 
 
   /* ================================
@@ -458,69 +464,188 @@ export class EnrollComponent {
      VERIFY PAYMENT
   ================================= */
 
+  // verifyPayment(response: any): void {
+
+  //   console.log(
+  //     'Verifying payment with backend...'
+  //   );
+
+
+  //   /*
+  //    * Show full-screen spinner while
+  //    * backend verifies Razorpay signature.
+  //    */
+
+  //   this.paymentProcessing = true;
+
+
+  //   this.paymentService
+  //     .verifyPayment(response)
+  //     .subscribe(
+
+  //       (result: any) => {
+
+  //         console.log(
+  //           'Payment verification response:',
+  //           result
+  //         );
+
+
+  //         this.paymentVerified = true;
+
+
+  //         /*
+  //          * Keep spinner visible while
+  //          * navigating to Courses page.
+  //          */
+
+  //         this.router.navigate([
+  //           '/courses'
+  //         ]);
+
+  //       },
+
+
+  //       (error) => {
+
+  //         this.paymentProcessing = false;
+
+  //         this.paymentVerified = false;
+
+
+  //         console.error(
+  //           'Payment verification failed:',
+  //           error
+  //         );
+
+
+  //         alert(
+  //           'Payment verification failed. Please contact support.'
+  //         );
+
+  //       }
+
+  //     );
+
+  // }
+
+
   verifyPayment(response: any): void {
 
-    console.log(
-      'Verifying payment with backend...'
-    );
+  console.log(
+    'Verifying payment with backend...'
+  );
+
+  // Show spinner
+  this.paymentProcessing = true;
+
+  this.paymentService
+    .verifyPayment(response)
+    .subscribe(
+
+      (result: any) => {
+
+        console.log(
+          'Payment verification response:',
+          result
+        );
+
+        /*
+         * Check backend response
+         *
+         * Adjust these conditions according
+         * to the response returned by your backend.
+         */
+
+        var paymentSuccess =
+          result === true ||
+          result === 'SUCCESS' ||
+          result === 'success' ||
+          result?.status === 'SUCCESS' ||
+          result?.status === 'success' ||
+          result?.success === true ||
+          result?.verified === true;
 
 
-    /*
-     * Show full-screen spinner while
-     * backend verifies Razorpay signature.
-     */
-
-    this.paymentProcessing = true;
-
-
-    this.paymentService
-      .verifyPayment(response)
-      .subscribe(
-
-        (result: any) => {
+        if (paymentSuccess) {
 
           console.log(
-            'Payment verification response:',
-            result
+            'Payment verified successfully'
           );
 
+          // Hide spinner
+          this.paymentProcessing = false;
 
+          // Show success confirmation
           this.paymentVerified = true;
 
-
           /*
-           * Keep spinner visible while
-           * navigating to Courses page.
+           * Store payment details for displaying
+           * on the success confirmation page.
            */
 
-          this.router.navigate([
-            '/courses'
-          ]);
+          this.paymentDetails = {
 
-        },
+            paymentId:
+              response.razorpayPaymentId,
 
+            orderId:
+              response.razorpayOrderId,
 
-        (error) => {
+            amount:
+              this.getTotalAmount(),
+
+            course:
+              this.course.title
+
+          };
+
+        }
+
+        else {
+
+          /*
+           * Backend responded, but payment
+           * was not verified successfully.
+           */
 
           this.paymentProcessing = false;
 
           this.paymentVerified = false;
 
-
           console.error(
-            'Payment verification failed:',
-            error
+            'Payment was not verified:',
+            result
           );
 
-
           alert(
-            'Payment verification failed. Please contact support.'
+            'Payment could not be verified. Please contact support.'
           );
 
         }
 
-      );
+      },
 
-  }
+
+      (error) => {
+
+        this.paymentProcessing = false;
+
+        this.paymentVerified = false;
+
+        console.error(
+          'Payment verification failed:',
+          error
+        );
+
+        alert(
+          'Payment verification failed. Please contact support.'
+        );
+
+      }
+
+    );
 
 }
+
+}	

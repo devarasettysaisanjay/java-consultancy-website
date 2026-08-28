@@ -309,3 +309,66 @@
   </div>
 
 </section>
+
+<div
+  class="payment-success-overlay"
+  *ngIf="paymentVerified">
+
+  <div class="payment-success-card">
+
+    <div class="success-icon">
+      ✓
+    </div>
+
+    <h2>
+      Payment Successful!
+    </h2>
+
+    <p>
+      Your payment has been successfully verified.
+    </p>
+
+    <div class="payment-details">
+
+      <div class="payment-detail-row">
+        <span>Course</span>
+        <strong>
+          {{ paymentDetails?.course }}
+        </strong>
+      </div>
+
+      <div class="payment-detail-row">
+        <span>Amount Paid</span>
+        <strong>
+          ₹{{ paymentDetails?.amount | number:'1.0-2' }}
+        </strong>
+      </div>
+
+      <div class="payment-detail-row">
+        <span>Payment ID</span>
+        <strong>
+          {{ paymentDetails?.paymentId }}
+        </strong>
+      </div>
+
+      <div class="payment-detail-row">
+        <span>Order ID</span>
+        <strong>
+          {{ paymentDetails?.orderId }}
+        </strong>
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="courses-btn"
+      (click)="goToCourses()">
+
+      Go to Courses
+
+    </button>
+
+  </div>
+
+</div>
