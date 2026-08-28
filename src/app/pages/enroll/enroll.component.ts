@@ -293,7 +293,7 @@ export class EnrollComponent implements OnInit {
      */
 
     var fee =
-      this.course.fee;
+      this.course.fee *100;
 
 
     var gst =
