@@ -1,9 +1,28 @@
-
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { COURSES } from 'src/app/data/courses';
 import { Course } from 'src/app/models/course.model';
 import { RazorPaymentServiceService } from 'src/app/razor-payment-service.service';
+
+interface StudentForm {
+  fullName: string;
+  email: string;
+  mobile: string;
+  experience: string;
+  currentStatus: string;
+  howFoundUs: string;
+  message: string;
+}
+
+interface PaymentDetails {
+  paymentId: string;
+  orderId: string;
+  amount: number;
+  course: string;
+  studentName: string;
+  studentEmail: string;
+  studentMobile: string;
+}
 
 @Component({
   selector: 'app-enroll',
@@ -11,18 +30,15 @@ import { RazorPaymentServiceService } from 'src/app/razor-payment-service.servic
   styleUrls: ['./enroll.component.css']
 })
 export class EnrollComponent implements OnInit {
-
   course!: Course;
 
   paymentProcessing = false;
   paymentVerified = false;
 
-  paymentDetails: any = null;
-
-  // Razorpay instance
+  paymentDetails: PaymentDetails | null = null;
   razorpayInstance: any = null;
 
-  student = {
+  student: StudentForm = {
     fullName: '',
     email: '',
     mobile: '',
@@ -32,878 +48,212 @@ export class EnrollComponent implements OnInit {
     message: ''
   };
 
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private paymentService: RazorPaymentServiceService
+    private paymentService: RazorPaymentServiceService,
+    private ngZone: NgZone
   ) {}
 
-
-  // =========================================================
-  // INIT
-  // =========================================================
-
   ngOnInit(): void {
+    const slug = this.route.snapshot.paramMap.get('slug');
+    const foundCourse = COURSES.find(c => c.slug === slug);
 
-    var slug =
-      this.route.snapshot.paramMap.get('slug');
-
-    this.course = COURSES.find(
-      c => c.slug === slug
-    )!;
-
-    if (!this.course) {
-
+    if (!foundCourse) {
       alert('Course not found');
-
-      this.router.navigate([
-        '/courses'
-      ]);
-
+      this.router.navigate(['/courses']);
       return;
     }
 
-    console.log(
-      'Course:',
-      this.course
-    );
-
-    console.log(
-      'Course fee in rupees:',
-      this.course.fee
-    );
+    this.course = foundCourse;
   }
-
-
-  // =========================================================
-  // GO TO COURSES
-  // =========================================================
 
   goToCourses(): void {
-
-    this.router.navigate([
-      '/courses'
-    ]);
-
+    this.router.navigate(['/courses']);
   }
-
-
-  // =========================================================
-  // COURSE FEE
-  // =========================================================
 
   getCourseFee(): number {
-
-    if (
-      !this.course ||
-      !this.course.fee
-    ) {
-
-      return 0;
-    }
-
-    // course.fee is in RUPEES
-
-    return this.course.fee;
+    return this.course?.fee || 0;
   }
-
-
-  // =========================================================
-  // GST
-  // =========================================================
 
   getGst(): number {
-
-    if (
-      !this.course ||
-      !this.course.fee
-    ) {
-
-      return 0;
-    }
-
-    return this.course.fee * 0.18;
+    return this.getCourseFee() * 0.18;
   }
-
-
-  // =========================================================
-  // TOTAL IN RUPEES
-  // =========================================================
 
   getTotalAmount(): number {
-
-    if (
-      !this.course ||
-      !this.course.fee
-    ) {
-
-      return 0;
-    }
-
-    var fee =
-      this.course.fee;
-
-    var gst =
-      fee * 0.18;
-
-    return fee + gst;
+    return Math.round((this.getCourseFee() + this.getGst()) * 100) / 100;
   }
-
-
-  // =========================================================
-  // TOTAL IN PAISE
-  // =========================================================
 
   getTotalAmountInPaise(): number {
-
-    var total =
-      this.getTotalAmount();
-
-    return Math.round(
-      total * 100
-    );
+    return Math.round(this.getTotalAmount() * 100);
   }
-
-
-  // =========================================================
-  // PROCEED TO PAYMENT
-  // =========================================================
 
   proceedToPayment(): void {
-
-    // -----------------------------------------------
-    // Check course
-    // -----------------------------------------------
-
     if (!this.course) {
-
-      alert(
-        'Course details not found'
-      );
-
+      alert('Course details not found');
       return;
     }
 
-
-    // -----------------------------------------------
-    // Validate student
-    // -----------------------------------------------
-
-    if (
-      !this.student.fullName ||
-      !this.student.email ||
-      !this.student.mobile
-    ) {
-
-      alert(
-        'Please fill all required student details'
-      );
-
+    if (!this.student.fullName || !this.student.email || !this.student.mobile) {
+      alert('Please fill all required student details');
       return;
     }
 
+    if (this.paymentProcessing) return;
 
-    // -----------------------------------------------
-    // Prevent duplicate payment
-    // -----------------------------------------------
-
-    if (this.paymentProcessing) {
-
-      return;
-    }
-
-
-    // -----------------------------------------------
-    // Calculate amount
-    // -----------------------------------------------
-
-    var fee =
-      this.course.fee;
-
-    var gst =
-      fee * 0.18;
-
-    var totalAmountInRupees =
-      fee + gst;
-
-    var totalAmountInPaise =
-      Math.round(
-        totalAmountInRupees * 100
-      );
-
-
-    console.log(
-      '================================'
-    );
-
-    console.log(
-      'PAYMENT DETAILS'
-    );
-
-    console.log(
-      '================================'
-    );
-
-    console.log(
-      'Course:',
-      this.course.title
-    );
-
-    console.log(
-      'Course fee:',
-      fee,
-      'rupees'
-    );
-
-    console.log(
-      'GST:',
-      gst,
-      'rupees'
-    );
-
-    console.log(
-      'Total:',
-      totalAmountInRupees,
-      'rupees'
-    );
-
-    console.log(
-      'Razorpay amount:',
-      totalAmountInPaise,
-      'paise'
-    );
-
-
-    // -----------------------------------------------
-    // Start processing
-    // -----------------------------------------------
-
+    const razorpayAmount = this.getTotalAmountInPaise();
     this.paymentProcessing = true;
 
-
-    // -----------------------------------------------
-    // Create Razorpay order
-    // -----------------------------------------------
-
-    this.paymentService
-      .createOrder(
-        totalAmountInPaise
-      )
-      .subscribe(
-
-        (order: any) => {
-
-          console.log(
-            'Razorpay order:',
-            order
-          );
-
-
-          if (!order) {
-
-            this.paymentProcessing = false;
-
-            alert(
-              'Invalid order response'
-            );
-
-            return;
-          }
-
-
-          if (!order.id) {
-
-            this.paymentProcessing = false;
-
-            alert(
-              'Razorpay order ID is missing'
-            );
-
-            return;
-          }
-
-
-          if (!order.amount) {
-
-            this.paymentProcessing = false;
-
-            alert(
-              'Razorpay order amount is missing'
-            );
-
-            return;
-          }
-
-
-          // Stop Angular loader
+    this.paymentService.createOrder(razorpayAmount).subscribe({
+      next: (order: any) => {
+        if (!order || !order.id || !order.amount) {
           this.paymentProcessing = false;
-
-
-          // Open Razorpay
-          this.openRazorpay(
-            order
-          );
-
-        },
-
-
-        (error) => {
-
-          this.paymentProcessing = false;
-
-          console.error(
-            'Create order error:',
-            error
-          );
-
-          alert(
-            'Unable to create payment order. Please try again.'
-          );
-
-        }
-
-      );
-
-  }
-
-
-  // =========================================================
-  // OPEN RAZORPAY
-  // =========================================================
-
-  openRazorpay(order: any): void {
-
-    var Razorpay =
-      (window as any).Razorpay;
-
-
-    if (!Razorpay) {
-
-      alert(
-        'Razorpay SDK is not loaded.'
-      );
-
-      return;
-    }
-
-
-    var options = {
-
-      key:
-        order.key,
-
-      amount:
-        order.amount,
-
-      currency:
-        order.currency || 'INR',
-
-      name:
-        'JavaBridge Consultancy',
-
-      description:
-        this.course.title +
-        ' Course Payment',
-
-      order_id:
-        order.id,
-
-
-      // =====================================================
-      // PREFILL
-      // =====================================================
-
-      prefill: {
-
-        name:
-          this.student.fullName,
-
-        email:
-          this.student.email,
-
-        contact:
-          this.student.mobile
-
-      },
-
-
-      // =====================================================
-      // NOTES
-      // =====================================================
-
-      notes: {
-
-        course:
-          this.course.title,
-
-        studentName:
-          this.student.fullName,
-
-        studentEmail:
-          this.student.email,
-
-        studentMobile:
-          this.student.mobile
-
-      },
-
-
-      // =====================================================
-      // THEME
-      // =====================================================
-
-      theme: {
-
-        color:
-          '#2563eb'
-
-      },
-
-
-      // =====================================================
-      // PAYMENT SUCCESS
-      // =====================================================
-
-      handler: (response: any) => {
-
-        console.log(
-          '======================================'
-        );
-
-        console.log(
-          'RAZORPAY PAYMENT SUCCESS'
-        );
-
-        console.log(
-          '======================================'
-        );
-
-
-        console.log(
-          'Payment ID:',
-          response.razorpay_payment_id
-        );
-
-        console.log(
-          'Order ID:',
-          response.razorpay_order_id
-        );
-
-        console.log(
-          'Signature:',
-          response.razorpay_signature
-        );
-
-
-        // -----------------------------------------------
-        // Validate response
-        // -----------------------------------------------
-
-        if (
-          !response ||
-          !response.razorpay_payment_id ||
-          !response.razorpay_order_id ||
-          !response.razorpay_signature
-        ) {
-
-          alert(
-            'Invalid payment response received.'
-          );
-
+          alert('Invalid order response from server');
           return;
         }
 
+        this.paymentProcessing = false;
+        this.openRazorpay(order);
+      },
+      error: (error) => {
+        console.error('Create order error:', error);
+        this.paymentProcessing = false;
+        alert('Unable to create payment order. Please try again.');
+      }
+    });
+  }
 
-        // -----------------------------------------------
-        // CLOSE RAZORPAY IMMEDIATELY
-        // -----------------------------------------------
+  openRazorpay(order: any): void {
+    const Razorpay = (window as any).Razorpay;
 
+    if (!Razorpay) {
+      alert('Razorpay SDK is not loaded. Please check index.html.');
+      return;
+    }
+
+    const options = {
+      key: order.key,
+      amount: order.amount,
+      currency: order.currency || 'INR',
+      name: 'JavaBridge Consultancy',
+      description: `${this.course.title} Course Payment`,
+      order_id: order.id,
+      prefill: {
+        name: this.student.fullName,
+        email: this.student.email,
+        contact: this.student.mobile
+      },
+      notes: {
+        course: this.course.title,
+        studentName: this.student.fullName,
+        studentEmail: this.student.email,
+        studentMobile: this.student.mobile
+      },
+      theme: {
+        color: '#2563eb'
+      },
+      handler: (response: any) => {
+        // 1. Force close the modal immediately on success before verification starts
         this.closeRazorpay();
 
-
-        // -----------------------------------------------
-        // Prepare backend verification
-        // -----------------------------------------------
-
-        var paymentData = {
-
-          razorpayOrderId:
-            response.razorpay_order_id,
-
-          razorpayPaymentId:
-            response.razorpay_payment_id,
-
-          razorpaySignature:
-            response.razorpay_signature
-
-        };
-
-
-        // -----------------------------------------------
-        // Show verification loader
-        // -----------------------------------------------
-
-        this.paymentProcessing = true;
-
-
-        // -----------------------------------------------
-        // Verify with backend
-        // -----------------------------------------------
-
-        this.verifyPayment(
-          paymentData
-        );
-
-      },
-
-
-      // =====================================================
-      // MODAL DISMISSED
-      // =====================================================
-
-      modal: {
-
-        ondismiss: () => {
-
-          console.log(
-            'Razorpay window dismissed'
-          );
-
-          /*
-           * Do not mark payment as successful here.
-           *
-           * Success is decided only by:
-           *
-           * Razorpay handler()
-           *
-           * AND
-           *
-           * Backend verification.
-           */
-
-          if (!this.paymentVerified) {
-
-            this.paymentProcessing =
-              false;
+        // 2. Wrap state transitions in NgZone to trigger UI change detection
+        this.ngZone.run(() => {
+          if (!response?.razorpay_payment_id || !response?.razorpay_order_id || !response?.razorpay_signature) {
+            this.paymentProcessing = false;
+            alert('Invalid payment response received.');
+            return;
           }
 
-          this.razorpayInstance =
-            null;
+          const paymentData = {
+            razorpayOrderId: response.razorpay_order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature
+          };
+
+          this.paymentProcessing = true;
+          this.verifyPayment(paymentData);
+        });
+      },
+      modal: {
+        ondismiss: () => {
+          this.ngZone.run(() => {
+            if (!this.paymentVerified) {
+              this.paymentProcessing = false;
+            }
+            this.razorpayInstance = null;
+          });
         }
-
       }
-
     };
 
-
-    // =====================================================
-    // CREATE RAZORPAY INSTANCE
-    // =====================================================
-
     try {
+      this.razorpayInstance = new Razorpay(options);
 
-      this.razorpayInstance =
-        new Razorpay(
-          options
-        );
-
-
-      // -----------------------------------------------
-      // Payment failed event
-      // -----------------------------------------------
-
-      this.razorpayInstance.on(
-        'payment.failed',
-        (error: any) => {
-
-          console.error(
-            'Payment failed:',
-            error
-          );
-
-          this.paymentProcessing =
-            false;
-
-          this.paymentVerified =
-            false;
-
-          this.razorpayInstance =
-            null;
-
-          alert(
-            'Payment failed. Please try again.'
-          );
-
-        }
-      );
-
-
-      // -----------------------------------------------
-      // Open Razorpay
-      // -----------------------------------------------
+      this.razorpayInstance.on('payment.failed', (error: any) => {
+        console.error('Payment failed:', error);
+        this.ngZone.run(() => {
+          this.paymentProcessing = false;
+          this.paymentVerified = false;
+          this.razorpayInstance = null;
+          alert('Payment failed. Please try again.');
+        });
+      });
 
       this.razorpayInstance.open();
-
+    } catch (error) {
+      console.error('Razorpay open error:', error);
+      this.paymentProcessing = false;
+      this.razorpayInstance = null;
+      alert('Unable to open Razorpay payment window.');
     }
-
-    catch (error) {
-
-      console.error(
-        'Razorpay error:',
-        error
-      );
-
-      this.paymentProcessing =
-        false;
-
-      this.razorpayInstance =
-        null;
-
-      alert(
-        'Unable to open Razorpay payment window.'
-      );
-
-    }
-
   }
-
-
-  // =========================================================
-  // CLOSE RAZORPAY
-  // =========================================================
 
   closeRazorpay(): void {
-
-    console.log(
-      'Closing Razorpay...'
-    );
-
-
-    if (
-      this.razorpayInstance
-    ) {
-
+    if (this.razorpayInstance) {
       try {
-
         this.razorpayInstance.close();
-
-        console.log(
-          'Razorpay close() called'
-        );
-
+      } catch (error) {
+        console.warn('Razorpay popup close handling:', error);
+      } finally {
+        this.razorpayInstance = null;
       }
-
-      catch (error) {
-
-        console.error(
-          'Unable to close Razorpay:',
-          error
-        );
-
-      }
-
     }
-
   }
 
-
-  // =========================================================
-  // VERIFY PAYMENT
-  // =========================================================
-
-  verifyPayment(
-    response: any
-  ): void {
-
-    console.log(
-      '======================================'
-    );
-
-    console.log(
-      'VERIFYING PAYMENT'
-    );
-
-    console.log(
-      '======================================'
-    );
-
-
-    this.paymentService
-      .verifyPayment(
-        response
-      )
-      .subscribe(
-
-        (result: any) => {
-
-          console.log(
-            'Backend verification response:',
-            result
-          );
-
-
-          // =================================================
-          // SUCCESS
-          // =================================================
-
-          if (
-            result &&
-            result.status === 'SUCCESS'
-          ) {
-
-            console.log(
-              'PAYMENT VERIFIED SUCCESSFULLY'
-            );
-
-
-            // -----------------------------------------------
-            // Make sure Razorpay is closed
-            // -----------------------------------------------
-
-            this.closeRazorpay();
-
-
-            this.razorpayInstance =
-              null;
-
-
-            // -----------------------------------------------
-            // Stop loader
-            // -----------------------------------------------
-
-            this.paymentProcessing =
-              false;
-
-
-            // -----------------------------------------------
-            // Show success page/section
-            // -----------------------------------------------
-
-            this.paymentVerified =
-              true;
-
-
-            // -----------------------------------------------
-            // Store payment details
-            // -----------------------------------------------
-
-            this.paymentDetails = {
-
-              paymentId:
-                response.razorpayPaymentId,
-
-              orderId:
-                response.razorpayOrderId,
-
-              amount:
-                this.getTotalAmount(),
-
-              course:
-                this.course.title,
-
-              studentName:
-                this.student.fullName,
-
-              studentEmail:
-                this.student.email,
-
-              studentMobile:
-                this.student.mobile
-
-            };
-
-
-            console.log(
-              '======================================'
-            );
-
-            console.log(
-              'SUCCESS PAGE DATA'
-            );
-
-            console.log(
-              '======================================'
-            );
-
-            console.log(
-              this.paymentDetails
-            );
-
-
-            /*
-             * If you want to automatically navigate
-             * to a separate success page:
-             *
-             * this.router.navigate([
-             *   '/payment-success'
-             * ]);
-             *
-             * But if you want to print the order
-             * details on the SAME enroll page,
-             * keep paymentVerified = true.
-             */
-
-          }
-
-
-          // =================================================
-          // VERIFICATION FAILED
-          // =================================================
-
-          else {
-
-            console.error(
-              'Payment verification failed:',
-              result
-            );
-
-
-            this.paymentProcessing =
-              false;
-
-
-            this.paymentVerified =
-              false;
-
-
-            alert(
-              'Payment could not be verified. Please contact support.'
-            );
-
-          }
-
-        },
-
-
-        // ===================================================
-        // BACKEND ERROR
-        // ===================================================
-
-        (error) => {
-
-          console.error(
-            'Payment verification API error:',
-            error
-          );
-
-
-          this.paymentProcessing =
-            false;
-
-
-          this.paymentVerified =
-            false;
-
-
-          alert(
-            'Payment verification failed. Please contact support.'
-          );
-
+  verifyPayment(paymentData: any): void {
+    this.paymentService.verifyPayment(paymentData).subscribe({
+      next: (result: any) => {
+        const isSuccess = 
+          result?.status?.toString().toUpperCase() === 'SUCCESS' || 
+          result?.status === true || 
+          result?.success === true;
+
+        if (isSuccess) {
+          this.paymentDetails = {
+            paymentId: paymentData.razorpayPaymentId,
+            orderId: paymentData.razorpayOrderId,
+            amount: this.getTotalAmount(),
+            course: this.course.title,
+            studentName: this.student.fullName,
+            studentEmail: this.student.email,
+            studentMobile: this.student.mobile
+          };
+
+          this.paymentProcessing = false;
+          this.paymentVerified = true;
+        } else {
+          console.error('Verification failed payload:', result);
+          this.paymentProcessing = false;
+          this.paymentVerified = false;
+          alert('Payment could not be verified. Please contact support.');
         }
-
-      );
-
+      },
+      error: (error) => {
+        console.error('Payment verification API error:', error);
+        this.paymentProcessing = false;
+        this.paymentVerified = false;
+        alert('Payment verification failed. Please contact support.');
+      }
+    });
   }
-
 }
