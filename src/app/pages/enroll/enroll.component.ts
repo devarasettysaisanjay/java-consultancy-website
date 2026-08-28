@@ -34,9 +34,13 @@ export class EnrollComponent implements OnInit {
 
   paymentProcessing = false;
   paymentVerified = false;
+  paymentSucceeded = false; // NEW: guards against ondismiss racing with a successful handler
 
   paymentDetails: PaymentDetails | null = null;
   razorpayInstance: any = null;
+
+  // NEW: remembers the body's overflow style before we touch it, so we restore it correctly
+  private previousBodyOverflow: string | null = null;
 
   student: StudentForm = {
     fullName: '',
@@ -77,7 +81,7 @@ export class EnrollComponent implements OnInit {
   }
 
   getGst(): number {
-    return this.getCourseFee() * 0.18;
+    return Math.round(this.getCourseFee() * 0.18 * 100) / 100;
   }
 
   getTotalAmount(): number {
@@ -85,7 +89,10 @@ export class EnrollComponent implements OnInit {
   }
 
   getTotalAmountInPaise(): number {
-    return Math.round(this.getTotalAmount() * 100);
+    // Compute directly from fee + GST in whole paise to avoid double-rounding drift
+    const feePaise = Math.round(this.getCourseFee() * 100);
+    const gstPaise = Math.round(this.getGst() * 100);
+    return feePaise + gstPaise;
   }
 
   proceedToPayment(): void {
@@ -100,6 +107,10 @@ export class EnrollComponent implements OnInit {
     }
 
     if (this.paymentProcessing) return;
+
+    // Reset state for a fresh attempt
+    this.paymentSucceeded = false;
+    this.paymentVerified = false;
 
     const razorpayAmount = this.getTotalAmountInPaise();
     this.paymentProcessing = true;
@@ -153,13 +164,17 @@ export class EnrollComponent implements OnInit {
         color: '#2563eb'
       },
       handler: (response: any) => {
-        // 1. Force close the modal immediately on success before verification starts
-        this.closeRazorpay();
+        // Mark success FIRST so a late-firing ondismiss doesn't reset paymentProcessing
+        this.paymentSucceeded = true;
 
-        // 2. Wrap state transitions in NgZone to trigger UI change detection
+        // 1. Force cleanup of Razorpay elements from the DOM immediately
+        this.forceCloseRazorpayDOM();
+
+        // 2. Trigger Angular Zone change detection for state updates
         this.ngZone.run(() => {
           if (!response?.razorpay_payment_id || !response?.razorpay_order_id || !response?.razorpay_signature) {
             this.paymentProcessing = false;
+            this.paymentSucceeded = false;
             alert('Invalid payment response received.');
             return;
           }
@@ -177,7 +192,9 @@ export class EnrollComponent implements OnInit {
       modal: {
         ondismiss: () => {
           this.ngZone.run(() => {
-            if (!this.paymentVerified) {
+            // Only reset processing state if this dismiss was NOT triggered
+            // by a successful payment already being verified
+            if (!this.paymentSucceeded) {
               this.paymentProcessing = false;
             }
             this.razorpayInstance = null;
@@ -191,13 +208,18 @@ export class EnrollComponent implements OnInit {
 
       this.razorpayInstance.on('payment.failed', (error: any) => {
         console.error('Payment failed:', error);
+        this.forceCloseRazorpayDOM();
         this.ngZone.run(() => {
           this.paymentProcessing = false;
           this.paymentVerified = false;
+          this.paymentSucceeded = false;
           this.razorpayInstance = null;
           alert('Payment failed. Please try again.');
         });
       });
+
+      // Capture current overflow before Razorpay potentially changes it
+      this.previousBodyOverflow = document.body.style.overflow || '';
 
       this.razorpayInstance.open();
     } catch (error) {
@@ -208,24 +230,36 @@ export class EnrollComponent implements OnInit {
     }
   }
 
-  closeRazorpay(): void {
-    if (this.razorpayInstance) {
-      try {
+  // Fail-safe helper to close SDK and clean lingering DOM nodes
+  private forceCloseRazorpayDOM(): void {
+    try {
+      if (this.razorpayInstance) {
         this.razorpayInstance.close();
-      } catch (error) {
-        console.warn('Razorpay popup close handling:', error);
-      } finally {
-        this.razorpayInstance = null;
       }
+    } catch (e) {
+      // Ignore native close errors
+    } finally {
+      this.razorpayInstance = null;
     }
+
+    // Force purge stuck Razorpay nodes and restore scrolling
+    setTimeout(() => {
+      const razorpayElements = document.querySelectorAll(
+        '.razorpay-container, .razorpay-backdrop, iframe[src*="razorpay"]'
+      );
+      razorpayElements.forEach(el => el.remove());
+
+      // Restore whatever overflow value was present before we opened the modal
+      document.body.style.overflow = this.previousBodyOverflow ?? '';
+    }, 150); // bumped from 50ms -> 150ms for slower devices/animations
   }
 
   verifyPayment(paymentData: any): void {
     this.paymentService.verifyPayment(paymentData).subscribe({
       next: (result: any) => {
-        const isSuccess = 
-          result?.status?.toString().toUpperCase() === 'SUCCESS' || 
-          result?.status === true || 
+        const isSuccess =
+          result?.status?.toString().toUpperCase() === 'SUCCESS' ||
+          result?.status === true ||
           result?.success === true;
 
         if (isSuccess) {
@@ -245,6 +279,7 @@ export class EnrollComponent implements OnInit {
           console.error('Verification failed payload:', result);
           this.paymentProcessing = false;
           this.paymentVerified = false;
+          this.paymentSucceeded = false;
           alert('Payment could not be verified. Please contact support.');
         }
       },
@@ -252,6 +287,7 @@ export class EnrollComponent implements OnInit {
         console.error('Payment verification API error:', error);
         this.paymentProcessing = false;
         this.paymentVerified = false;
+        this.paymentSucceeded = false;
         alert('Payment verification failed. Please contact support.');
       }
     });
