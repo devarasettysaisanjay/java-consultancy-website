@@ -93,9 +93,13 @@ getTotalAmount(): number {
     console.log('Course fee in rupees:', this.course.fee);
 
     this.paymentProcessing = true;
-
+ var fee=  this.course.fee*100 ;
+   var gst=  fee*0.18;
+   var totalAmount=fee+gst;
+ 
+ console.log("printing amount  in paise", totalAmount);
     this.paymentService
-      .createOrder(this.getCourseFee() + this.getGst())
+      .createOrder(totalAmount)
       .subscribe(
 
         (order: any) => {

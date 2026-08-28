@@ -210,7 +210,7 @@
         </span>
 
    <strong>
-  ₹{{ getCourseFee() }}
+  ₹{{ course.fee }}
 </strong>
 
       </div>
@@ -222,7 +222,7 @@
         </span>
 
       <strong>
-  ₹{{ getGst() }}
+  ₹{{ course.fee* 0.18 }}
 </strong>
 
       </div>
@@ -236,7 +236,7 @@
         </span>
 
         <strong>
-  ₹{{ getTotalAmount() }}
+  ₹{{ course.fee+ ( course.fee*0.18) }}
 </strong>
       </div>
 
