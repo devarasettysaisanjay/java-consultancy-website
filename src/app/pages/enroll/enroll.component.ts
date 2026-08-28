@@ -460,83 +460,13 @@ export class EnrollComponent {
   }
 
 
-  /* ================================
-     VERIFY PAYMENT
-  ================================= */
-
-  // verifyPayment(response: any): void {
-
-  //   console.log(
-  //     'Verifying payment with backend...'
-  //   );
-
-
-  //   /*
-  //    * Show full-screen spinner while
-  //    * backend verifies Razorpay signature.
-  //    */
-
-  //   this.paymentProcessing = true;
-
-
-  //   this.paymentService
-  //     .verifyPayment(response)
-  //     .subscribe(
-
-  //       (result: any) => {
-
-  //         console.log(
-  //           'Payment verification response:',
-  //           result
-  //         );
-
-
-  //         this.paymentVerified = true;
-
-
-  //         /*
-  //          * Keep spinner visible while
-  //          * navigating to Courses page.
-  //          */
-
-  //         this.router.navigate([
-  //           '/courses'
-  //         ]);
-
-  //       },
-
-
-  //       (error) => {
-
-  //         this.paymentProcessing = false;
-
-  //         this.paymentVerified = false;
-
-
-  //         console.error(
-  //           'Payment verification failed:',
-  //           error
-  //         );
-
-
-  //         alert(
-  //           'Payment verification failed. Please contact support.'
-  //         );
-
-  //       }
-
-  //     );
-
-  // }
-
-
   verifyPayment(response: any): void {
 
   console.log(
     'Verifying payment with backend...'
   );
 
-  // Show spinner
+  // Show spinner while backend verifies payment
   this.paymentProcessing = true;
 
   this.paymentService
@@ -550,24 +480,15 @@ export class EnrollComponent {
           result
         );
 
-        /*
-         * Check backend response
-         *
-         * Adjust these conditions according
-         * to the response returned by your backend.
-         */
 
-        var paymentSuccess =
-          result === true ||
-          result === 'SUCCESS' ||
-          result === 'success' ||
-          result?.status === 'SUCCESS' ||
-          result?.status === 'success' ||
-          result?.success === true ||
-          result?.verified === true;
+        // =================================
+        // PAYMENT SUCCESS
+        // =================================
 
-
-        if (paymentSuccess) {
+        if (
+          result &&
+          result.status === 'SUCCESS'
+        ) {
 
           console.log(
             'Payment verified successfully'
@@ -579,11 +500,8 @@ export class EnrollComponent {
           // Show success confirmation
           this.paymentVerified = true;
 
-          /*
-           * Store payment details for displaying
-           * on the success confirmation page.
-           */
 
+          // Store payment details
           this.paymentDetails = {
 
             paymentId:
@@ -600,23 +518,29 @@ export class EnrollComponent {
 
           };
 
+
+          console.log(
+            'Payment Details:',
+            this.paymentDetails
+          );
+
         }
+
+
+        // =================================
+        // PAYMENT NOT SUCCESSFUL
+        // =================================
 
         else {
 
-          /*
-           * Backend responded, but payment
-           * was not verified successfully.
-           */
+          console.error(
+            'Payment verification was not successful:',
+            result
+          );
 
           this.paymentProcessing = false;
 
           this.paymentVerified = false;
-
-          console.error(
-            'Payment was not verified:',
-            result
-          );
 
           alert(
             'Payment could not be verified. Please contact support.'
@@ -626,6 +550,10 @@ export class EnrollComponent {
 
       },
 
+
+      // =================================
+      // API ERROR
+      // =================================
 
       (error) => {
 
@@ -645,7 +573,6 @@ export class EnrollComponent {
       }
 
     );
-
 }
 
 }	
