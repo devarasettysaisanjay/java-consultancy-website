@@ -45,7 +45,7 @@ export class EnrollComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log('Enroll page loaded');
+    console.log('hello ...');
 
     var slug =
       this.route.snapshot.paramMap.get('slug');
