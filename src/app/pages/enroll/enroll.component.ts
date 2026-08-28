@@ -1,9 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 
-import { COURSES } from 'src/app/data/courses';
-import { Course } from 'src/app/models/course.model';
-import { RazorPaymentServiceService } from 'src/app/razor-payment-service.service';
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
+
+import {
+  COURSES
+} from 'src/app/data/courses';
+
+import {
+  Course
+} from 'src/app/models/course.model';
+
+import {
+  RazorPaymentServiceService
+} from 'src/app/razor-payment-service.service';
+
+import {
+  Subscription,
+  timer
+} from 'rxjs';
+
+import {
+  switchMap,
+  take
+} from 'rxjs/operators';
+
 
 interface StudentForm {
 
@@ -17,6 +44,7 @@ interface StudentForm {
 
 }
 
+
 interface PaymentDetails {
 
   paymentId: string;
@@ -29,14 +57,18 @@ interface PaymentDetails {
 
 }
 
+
 @Component({
   selector: 'app-enroll',
   templateUrl: './enroll.component.html',
   styleUrls: ['./enroll.component.css']
 })
-export class EnrollComponent implements OnInit {
+export class EnrollComponent
+  implements OnInit, OnDestroy {
+
 
   course!: Course;
+
 
   paymentProcessing = false;
 
@@ -44,9 +76,25 @@ export class EnrollComponent implements OnInit {
 
   paymentSucceeded = false;
 
-  paymentDetails: PaymentDetails | null = null;
+
+  paymentDetails:
+    PaymentDetails | null = null;
+
 
   razorpayInstance: any = null;
+
+
+  /*
+   * Razorpay order ID
+   */
+  currentOrderId: string | null = null;
+
+
+  /*
+   * Polling subscription
+   */
+  paymentPollingSubscription:
+    Subscription | null = null;
 
 
   student: StudentForm = {
@@ -81,24 +129,33 @@ export class EnrollComponent implements OnInit {
   ngOnInit(): void {
 
     const slug =
-      this.route.snapshot.paramMap.get('slug');
+      this.route.snapshot
+        .paramMap
+        .get('slug');
+
 
     const foundCourse =
       COURSES.find(
         c => c.slug === slug
       );
 
+
     if (!foundCourse) {
 
       alert('Course not found');
 
-      this.router.navigate(['/courses']);
+      this.router.navigate(
+        ['/courses']
+      );
 
       return;
 
     }
 
-    this.course = foundCourse;
+
+    this.course =
+      foundCourse;
+
 
     console.log(
       'Course loaded:',
@@ -109,12 +166,12 @@ export class EnrollComponent implements OnInit {
 
 
   // ============================================================
-  // NAVIGATION
+  // DESTROY
   // ============================================================
 
-  goToCourses(): void {
+  ngOnDestroy(): void {
 
-    this.router.navigate(['/courses']);
+    this.stopPaymentPolling();
 
   }
 
@@ -161,6 +218,14 @@ export class EnrollComponent implements OnInit {
   }
 
 
+  /*
+   * Razorpay requires paise.
+   *
+   * Example:
+   *
+   * ₹118 = 11800 paise
+   */
+
   getTotalAmountInPaise(): number {
 
     return Math.round(
@@ -177,7 +242,7 @@ export class EnrollComponent implements OnInit {
   proceedToPayment(): void {
 
     console.log(
-      '================================'
+      '===================================='
     );
 
     console.log(
@@ -185,12 +250,12 @@ export class EnrollComponent implements OnInit {
     );
 
     console.log(
-      '================================'
+      '===================================='
     );
 
 
     // ----------------------------------------------------------
-    // COURSE VALIDATION
+    // COURSE
     // ----------------------------------------------------------
 
     if (!this.course) {
@@ -205,13 +270,17 @@ export class EnrollComponent implements OnInit {
 
 
     // ----------------------------------------------------------
-    // STUDENT VALIDATION
+    // STUDENT
     // ----------------------------------------------------------
 
     if (
+
       !this.student.fullName ||
+
       !this.student.email ||
+
       !this.student.mobile
+
     ) {
 
       alert(
@@ -239,14 +308,23 @@ export class EnrollComponent implements OnInit {
 
 
     // ----------------------------------------------------------
-    // RESET STATE
+    // RESET
     // ----------------------------------------------------------
 
-    this.paymentVerified = false;
+    this.paymentVerified =
+      false;
 
-    this.paymentSucceeded = false;
+    this.paymentSucceeded =
+      false;
 
-    this.paymentDetails = null;
+    this.paymentDetails =
+      null;
+
+    this.currentOrderId =
+      null;
+
+
+    this.stopPaymentPolling();
 
 
     // ----------------------------------------------------------
@@ -258,7 +336,17 @@ export class EnrollComponent implements OnInit {
 
 
     console.log(
-      'Amount:',
+      'Course fee:',
+      this.getCourseFee()
+    );
+
+    console.log(
+      'GST:',
+      this.getGst()
+    );
+
+    console.log(
+      'Total amount:',
       this.getTotalAmount()
     );
 
@@ -268,12 +356,24 @@ export class EnrollComponent implements OnInit {
     );
 
 
-    this.paymentProcessing = true;
+    if (amountInPaise <= 0) {
+
+      alert(
+        'Invalid payment amount'
+      );
+
+      return;
+
+    }
 
 
-    // ----------------------------------------------------------
+    this.paymentProcessing =
+      true;
+
+
+    // ==========================================================
     // CREATE ORDER
-    // ----------------------------------------------------------
+    // ==========================================================
 
     this.paymentService
       .createOrder(amountInPaise)
@@ -282,7 +382,7 @@ export class EnrollComponent implements OnInit {
         next: (order: any) => {
 
           console.log(
-            '================================'
+            '===================================='
           );
 
           console.log(
@@ -290,7 +390,7 @@ export class EnrollComponent implements OnInit {
           );
 
           console.log(
-            '================================'
+            '===================================='
           );
 
           console.log(
@@ -300,17 +400,22 @@ export class EnrollComponent implements OnInit {
 
 
           if (
+
             !order ||
+
             !order.id ||
+
             !order.amount
+
           ) {
 
             console.error(
-              'Invalid order response:',
+              'Invalid order:',
               order
             );
 
-            this.paymentProcessing = false;
+            this.paymentProcessing =
+              false;
 
             alert(
               'Invalid order response from server'
@@ -321,14 +426,29 @@ export class EnrollComponent implements OnInit {
           }
 
 
-          this.paymentProcessing = false;
+          /*
+           * VERY IMPORTANT
+           *
+           * Save order ID.
+           */
+
+          this.currentOrderId =
+            order.id;
 
 
-          // ----------------------------------------------------
-          // OPEN RAZORPAY
-          // ----------------------------------------------------
+          console.log(
+            'RAZORPAY ORDER ID:',
+            this.currentOrderId
+          );
 
-          this.openRazorpay(order);
+
+          /*
+           * Open Razorpay.
+           */
+
+          this.openRazorpay(
+            order
+          );
 
         },
 
@@ -336,11 +456,12 @@ export class EnrollComponent implements OnInit {
         error: (error) => {
 
           console.error(
-            'Create order API error:',
+            'Create order error:',
             error
           );
 
-          this.paymentProcessing = false;
+          this.paymentProcessing =
+            false;
 
           alert(
             'Unable to create payment order'
@@ -357,10 +478,12 @@ export class EnrollComponent implements OnInit {
   // OPEN RAZORPAY
   // ============================================================
 
-  openRazorpay(order: any): void {
+  openRazorpay(
+    order: any
+  ): void {
 
     console.log(
-      '================================'
+      '===================================='
     );
 
     console.log(
@@ -368,7 +491,7 @@ export class EnrollComponent implements OnInit {
     );
 
     console.log(
-      '================================'
+      '===================================='
     );
 
 
@@ -383,8 +506,11 @@ export class EnrollComponent implements OnInit {
     if (!Razorpay) {
 
       console.error(
-        'Razorpay SDK not found'
+        'Razorpay SDK NOT FOUND'
       );
+
+      this.paymentProcessing =
+        false;
 
       alert(
         'Razorpay SDK is not loaded'
@@ -400,15 +526,17 @@ export class EnrollComponent implements OnInit {
     );
 
 
-    // ----------------------------------------------------------
-    // OPTIONS
-    // ----------------------------------------------------------
+    // ==========================================================
+    // RAZORPAY OPTIONS
+    // ==========================================================
 
     const options: any = {
 
-      key: 'rzp_live_TPDar9HoNLuaOX',
+      key:
+        'rzp_live_TPDar9HoNLuaOX',
 
-      amount: order.amount,
+      amount:
+        order.amount,
 
       currency:
         order.currency || 'INR',
@@ -476,109 +604,51 @@ export class EnrollComponent implements OnInit {
 
 
       // ========================================================
-      // SUCCESS HANDLER
+      // HANDLER
       // ========================================================
 
       handler: (response: any) => {
 
         console.log(
-          '========================================'
+          '****************************************'
         );
 
         console.log(
-          '🔥🔥 RAZORPAY SUCCESS HANDLER CALLED 🔥🔥'
+          '🔥 RAZORPAY HANDLER CALLED'
         );
 
         console.log(
-          '========================================'
+          '****************************************'
         );
 
-
         console.log(
-          'Razorpay response:',
+          'Response:',
           response
         );
 
 
-        // ------------------------------------------------------
-        // VALIDATE RESPONSE
-        // ------------------------------------------------------
+        /*
+         * Handler is only a backup.
+         *
+         * We still verify using backend.
+         */
 
         if (
-          !response ||
-          !response.razorpay_payment_id ||
-          !response.razorpay_order_id ||
-          !response.razorpay_signature
+          response &&
+          response.razorpay_order_id
         ) {
 
-          console.error(
-            'Invalid Razorpay response:',
-            response
-          );
-
-          alert(
-            'Invalid payment response received'
-          );
-
-          return;
+          this.currentOrderId =
+            response.razorpay_order_id;
 
         }
 
 
-        console.log(
-          'Payment ID:',
-          response.razorpay_payment_id
-        );
+        /*
+         * Start backend status checking.
+         */
 
-        console.log(
-          'Order ID:',
-          response.razorpay_order_id
-        );
-
-        console.log(
-          'Signature:',
-          response.razorpay_signature
-        );
-
-
-        // ------------------------------------------------------
-        // CREATE VERIFY REQUEST
-        // ------------------------------------------------------
-
-        const paymentData = {
-
-          razorpayOrderId:
-            response.razorpay_order_id,
-
-          razorpayPaymentId:
-            response.razorpay_payment_id,
-
-          razorpaySignature:
-            response.razorpay_signature
-
-        };
-
-
-        console.log(
-          'Sending payment to verification API:',
-          paymentData
-        );
-
-
-        // ------------------------------------------------------
-        // SHOW PROCESSING
-        // ------------------------------------------------------
-
-        this.paymentProcessing = true;
-
-
-        // ------------------------------------------------------
-        // VERIFY PAYMENT
-        // ------------------------------------------------------
-
-        this.verifyPayment(
-          paymentData
-        );
+        this.startPaymentPolling();
 
       },
 
@@ -589,11 +659,14 @@ export class EnrollComponent implements OnInit {
 
       modal: {
 
-        backdropclose: false,
+        backdropclose:
+          false,
 
-        escape: false,
+        escape:
+          false,
 
-        confirm_close: true,
+        confirm_close:
+          true,
 
 
         ondismiss: () => {
@@ -603,16 +676,28 @@ export class EnrollComponent implements OnInit {
           );
 
 
+          /*
+           * IMPORTANT
+           *
+           * Don't immediately say payment failed.
+           *
+           * UPI payment may have completed even though
+           * the checkout modal disappeared.
+           */
+
           if (
-            !this.paymentSucceeded
+            !this.paymentSucceeded &&
+            this.currentOrderId
           ) {
 
-            this.paymentProcessing = false;
+            console.log(
+              'Checking payment after modal dismissal...'
+            );
+
+
+            this.startPaymentPolling();
 
           }
-
-
-          this.razorpayInstance = null;
 
         }
 
@@ -627,9 +712,9 @@ export class EnrollComponent implements OnInit {
     );
 
 
-    // ----------------------------------------------------------
-    // CREATE INSTANCE
-    // ----------------------------------------------------------
+    // ==========================================================
+    // CREATE RAZORPAY INSTANCE
+    // ==========================================================
 
     try {
 
@@ -642,16 +727,16 @@ export class EnrollComponent implements OnInit {
       );
 
 
-      // --------------------------------------------------------
-      // PAYMENT FAILED
-      // --------------------------------------------------------
+      // ========================================================
+      // PAYMENT FAILED EVENT
+      // ========================================================
 
       this.razorpayInstance.on(
         'payment.failed',
         (error: any) => {
 
           console.error(
-            '================================'
+            '===================================='
           );
 
           console.error(
@@ -659,42 +744,29 @@ export class EnrollComponent implements OnInit {
           );
 
           console.error(
-            '================================'
-          );
-
-          console.error(
             error
           );
 
-
-          this.paymentProcessing = false;
-
-          this.paymentSucceeded = false;
-
-          this.paymentVerified = false;
+          console.error(
+            '===================================='
+          );
 
 
-          try {
+          /*
+           * Don't poll forever after an actual failure.
+           */
 
-            if (
-              this.razorpayInstance
-            ) {
-
-              this.razorpayInstance.close();
-
-            }
-
-          } catch (e) {
-
-            console.warn(
-              'Close error:',
-              e
-            );
-
-          }
+          this.stopPaymentPolling();
 
 
-          this.razorpayInstance = null;
+          this.paymentProcessing =
+            false;
+
+          this.paymentSucceeded =
+            false;
+
+          this.paymentVerified =
+            false;
 
 
           alert(
@@ -705,9 +777,9 @@ export class EnrollComponent implements OnInit {
       );
 
 
-      // --------------------------------------------------------
+      // ========================================================
       // OPEN
-      // --------------------------------------------------------
+      // ========================================================
 
       console.log(
         'Calling Razorpay.open()'
@@ -718,7 +790,7 @@ export class EnrollComponent implements OnInit {
 
 
       console.log(
-        'Razorpay.open() completed'
+        'Razorpay.open() called'
       );
 
     }
@@ -729,9 +801,13 @@ export class EnrollComponent implements OnInit {
         error
       );
 
-      this.paymentProcessing = false;
 
-      this.razorpayInstance = null;
+      this.paymentProcessing =
+        false;
+
+      this.razorpayInstance =
+        null;
+
 
       alert(
         'Unable to open Razorpay checkout'
@@ -743,207 +819,314 @@ export class EnrollComponent implements OnInit {
 
 
   // ============================================================
-  // VERIFY PAYMENT
+  // START PAYMENT POLLING
   // ============================================================
 
-  verifyPayment(
-    paymentData: any
-  ): void {
+  startPaymentPolling(): void {
+
+    if (!this.currentOrderId) {
+
+      console.error(
+        'Order ID missing'
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Don't start multiple polling processes.
+     */
+
+    this.stopPaymentPolling();
+
 
     console.log(
-      '================================'
+      '===================================='
     );
 
     console.log(
-      'VERIFY PAYMENT'
+      'START PAYMENT STATUS CHECK'
     );
 
     console.log(
-      '================================'
+      'ORDER ID:',
+      this.currentOrderId
     );
-
 
     console.log(
-      'Sending:',
-      paymentData
+      '===================================='
     );
 
 
-    this.paymentService
-      .verifyPayment(paymentData)
-      .subscribe({
-
-        // ------------------------------------------------------
-        // SUCCESS
-        // ------------------------------------------------------
-
-        next: (result: any) => {
-
-          console.log(
-            'Verification response:',
-            result
-          );
+    this.paymentProcessing =
+      true;
 
 
-          const success =
-            result?.success === true ||
-            result?.status === true ||
-            result?.status === 'SUCCESS';
+    /*
+     * Immediately check.
+     *
+     * Then every 3 seconds.
+     *
+     * Maximum 40 checks.
+     *
+     * 40 × 3 = 120 seconds.
+     */
 
+    this.paymentPollingSubscription =
+      timer(0, 3000)
 
-          if (success) {
+        .pipe(
 
-            console.log(
-              '================================'
-            );
+          take(40),
+
+          switchMap(() => {
 
             console.log(
-              '✅ PAYMENT VERIFIED SUCCESSFULLY'
+              'Checking backend payment status...'
             );
 
-            console.log(
-              '================================'
-            );
-
-
-            // --------------------------------------------------
-            // PAYMENT DETAILS
-            // --------------------------------------------------
-
-            this.paymentDetails = {
-
-              paymentId:
-                paymentData.razorpayPaymentId,
-
-              orderId:
-                paymentData.razorpayOrderId,
-
-              amount:
-                this.getTotalAmount(),
-
-              course:
-                this.course.title,
-
-              studentName:
-                this.student.fullName,
-
-              studentEmail:
-                this.student.email,
-
-              studentMobile:
-                this.student.mobile
-
-            };
-
-
-            // --------------------------------------------------
-            // PAYMENT STATES
-            // --------------------------------------------------
-
-            this.paymentProcessing = false;
-
-            this.paymentVerified = true;
-
-            this.paymentSucceeded = true;
-
-
-            // --------------------------------------------------
-            // CLOSE RAZORPAY
-            // --------------------------------------------------
-
-            console.log(
-              'Closing Razorpay checkout...'
-            );
-
-
-            try {
-
-              if (
-                this.razorpayInstance
-              ) {
-
-                this.razorpayInstance.close();
-
-              }
-
-            }
-            catch (error) {
-
-              console.warn(
-                'Razorpay close error:',
-                error
+            return this.paymentService
+              .checkPaymentStatus(
+                this.currentOrderId!
               );
 
-            }
+          })
 
+        )
 
-            this.razorpayInstance = null;
+        .subscribe({
 
+          next: (result: any) => {
 
             console.log(
-              'Razorpay checkout closed'
-            );
-
-          }
-
-
-          // ------------------------------------------------------
-          // FAILED VERIFICATION
-          // ------------------------------------------------------
-
-          else {
-
-            console.error(
-              '❌ PAYMENT VERIFICATION FAILED'
-            );
-
-            console.error(
+              'Backend payment status:',
               result
             );
 
 
-            this.paymentProcessing = false;
+            // ==================================================
+            // SUCCESS
+            // ==================================================
 
-            this.paymentVerified = false;
+            if (
+              result &&
+              result.success === true
+            ) {
 
-            this.paymentSucceeded = false;
+              console.log(
+                '===================================='
+              );
+
+              console.log(
+                '🎉 PAYMENT SUCCESS'
+              );
+
+              console.log(
+                '===================================='
+              );
 
 
-            alert(
-              'Payment could not be verified. Please contact support.'
+              this.handlePaymentSuccess(
+                result
+              );
+
+
+              this.stopPaymentPolling();
+
+            }
+
+          },
+
+
+          error: (error) => {
+
+            console.error(
+              'Payment status API error:',
+              error
             );
+
+            /*
+             * Don't immediately close the checkout.
+             *
+             * Keep trying.
+             */
+
+          },
+
+
+          complete: () => {
+
+            if (
+              !this.paymentSucceeded
+            ) {
+
+              console.log(
+                'Payment status checking finished'
+              );
+
+              this.paymentProcessing =
+                false;
+
+            }
 
           }
 
-        },
+        });
+
+  }
 
 
-        // ------------------------------------------------------
-        // API ERROR
-        // ------------------------------------------------------
+  // ============================================================
+  // SUCCESS
+  // ============================================================
 
-        error: (error) => {
+  handlePaymentSuccess(
+    result: any
+  ): void {
 
-          console.error(
-            'Verification API error:',
-            error
-          );
+    console.log(
+      '===================================='
+    );
+
+    console.log(
+      'HANDLE PAYMENT SUCCESS'
+    );
+
+    console.log(
+      '===================================='
+    );
 
 
-          this.paymentProcessing = false;
+    this.paymentVerified =
+      true;
 
-          this.paymentVerified = false;
+    this.paymentSucceeded =
+      true;
 
-          this.paymentSucceeded = false;
+    this.paymentProcessing =
+      false;
 
 
-          alert(
-            'Payment verification failed. Please contact support.'
-          );
+    // ==========================================================
+    // PAYMENT DETAILS
+    // ==========================================================
 
-        }
+    this.paymentDetails = {
 
-      });
+      paymentId:
+        result.paymentId,
+
+      orderId:
+        result.orderId,
+
+      amount:
+        this.getTotalAmount(),
+
+      course:
+        this.course.title,
+
+      studentName:
+        this.student.fullName,
+
+      studentEmail:
+        this.student.email,
+
+      studentMobile:
+        this.student.mobile
+
+    };
+
+
+    console.log(
+      'Payment details:',
+      this.paymentDetails
+    );
+
+
+    // ==========================================================
+    // CLOSE RAZORPAY
+    // ==========================================================
+
+    console.log(
+      'Closing Razorpay...'
+    );
+
+
+    try {
+
+      if (
+        this.razorpayInstance
+      ) {
+
+        this.razorpayInstance.close();
+
+        console.log(
+          'Razorpay close() called'
+        );
+
+      }
+
+    }
+    catch (error) {
+
+      console.error(
+        'Error closing Razorpay:',
+        error
+      );
+
+    }
+
+
+    this.razorpayInstance =
+      null;
+
+
+    this.stopPaymentPolling();
+
+
+    console.log(
+      '===================================='
+    );
+
+    console.log(
+      '✅ PAYMENT VERIFIED'
+    );
+
+    console.log(
+      '✅ RAZORPAY CLOSED'
+    );
+
+    console.log(
+      '===================================='
+    );
+
+
+    alert(
+      'Payment successful!'
+    );
+
+  }
+
+
+  // ============================================================
+  // STOP POLLING
+  // ============================================================
+
+  stopPaymentPolling(): void {
+
+    if (
+      this.paymentPollingSubscription
+    ) {
+
+      this.paymentPollingSubscription
+        .unsubscribe();
+
+      this.paymentPollingSubscription =
+        null;
+
+    }
 
   }
 
