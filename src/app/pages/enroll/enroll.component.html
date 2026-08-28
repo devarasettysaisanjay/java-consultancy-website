@@ -281,8 +281,8 @@
           GST (18%)
         </span>
 
-        <<strong>
-  ₹{{ getGst()}
+        <strong>
+  ₹{{ getGst()}}
 </strong>
 
       </div>
@@ -332,6 +332,7 @@
 
       <div class="payment-detail-row">
         <span>Course</span>
+
         <strong>
           {{ paymentDetails?.course }}
         </strong>
@@ -339,6 +340,7 @@
 
       <div class="payment-detail-row">
         <span>Amount Paid</span>
+
         <strong>
           ₹{{ paymentDetails?.amount | number:'1.0-2' }}
         </strong>
@@ -346,6 +348,7 @@
 
       <div class="payment-detail-row">
         <span>Payment ID</span>
+
         <strong>
           {{ paymentDetails?.paymentId }}
         </strong>
@@ -353,6 +356,7 @@
 
       <div class="payment-detail-row">
         <span>Order ID</span>
+
         <strong>
           {{ paymentDetails?.orderId }}
         </strong>
