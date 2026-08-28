@@ -406,7 +406,7 @@ export class EnrollComponent implements OnInit {
 
     const options: any = {
 
-      key: order.key,
+      key: 'rzp_live_TPDar9HoNLuaOX',
 
       amount: order.amount,
 
