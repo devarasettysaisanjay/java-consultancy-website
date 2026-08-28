@@ -7,8 +7,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class RazorPaymentServiceService {
 
-  private baseUrl =
-    'https://razor-pay-payment-application.onrender.com/razor-pay';
+  private baseUrl ='http://localhost:8080/razor-pay'
+   // 'https://razor-pay-payment-application.onrender.com/razor-pay';
 
 
   constructor(private http: HttpClient) {

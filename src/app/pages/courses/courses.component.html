@@ -67,8 +67,9 @@
 
         <div class="course-price">
 
-          ₹{{ course.fee | number }}
-
+        <strong>
+  ₹{{ course && course.fee ? (course.fee / 100) : 0 }}
+</strong>
         </div>
 
 

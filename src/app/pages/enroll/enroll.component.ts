@@ -282,6 +282,21 @@ course!: Course;
   }
 
 
+  getCourseFee(): number {
+  return this.course && this.course.fee
+    ? this.course.fee / 100
+    : 0;
+}
+
+getGst(): number {
+  return this.getCourseFee() * 0.18;
+}
+
+getTotalAmount(): number {
+  return this.getCourseFee() + this.getGst();
+}
+
+
   proceedToPayment(): void {
 
     if (!this.course) {

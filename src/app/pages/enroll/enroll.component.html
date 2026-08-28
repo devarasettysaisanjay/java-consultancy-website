@@ -209,9 +209,9 @@
           Course Fee
         </span>
 
-        <strong>
-          ₹{{ course?.fee | number }}
-        </strong>
+   <strong>
+  ₹{{ getCourseFee() }}
+</strong>
 
       </div>
 
@@ -221,9 +221,9 @@
           GST (18%)
         </span>
 
-        <strong>
-        ₹{{ ((course.fee || 0) * 1.18) | number:'1.0-0' }}
-        </strong>
+      <strong>
+  ₹{{ getGst() }}
+</strong>
 
       </div>
 
@@ -236,9 +236,8 @@
         </span>
 
         <strong>
-          ₹{{ ((course?.fee || 0) * 1.18) | number:'1.0-0' }}
-        </strong>
-
+  ₹{{ getTotalAmount() }}
+</strong>
       </div>
 
     </div>
