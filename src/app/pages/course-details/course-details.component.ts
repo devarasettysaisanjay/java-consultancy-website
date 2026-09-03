@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { COURSES } from 'src/app/data/courses';
 import { Course } from 'src/app/models/course.model';
@@ -14,7 +15,8 @@ export class CourseDetailsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+     private titleService: Title
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +30,12 @@ export class CourseDetailsComponent {
     );
 
     console.log('Selected Course:', this.course);
+    if (this.course) {
+
+        this.titleService.setTitle(
+          this.course.title + ' Training | JavaBridge Connect'
+        );
+      }
   }
 
 
