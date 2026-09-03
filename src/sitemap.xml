@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://javabridgeconnect.org/</loc>
+    </url>
+
+
+      <url>
+        <loc>https://javabridgeconnect.org/courses/core-java</loc>
+    </url>
+
+
+      <url>
+        <loc>https://javabridgeconnect.org/courses/spring-boot</loc>
+    </url>
+
+    <url>
+        <loc>https://javabridgeconnect.org/courses/microservices</loc>
+    </url>
+
+
+      <url>
+        <loc>https://javabridgeconnect.org/courses/sql-databases</loc>
+    </url>
+
+      <url>
+        <loc>https://javabridgeconnect.org/courses/docker</loc>
+    </url>
+
+
+     <url>
+        <loc>https://javabridgeconnect.org/courses/full-stack-java</loc>
+    </url>
+
+    <url>
+        <loc>https://javabridgeconnect.org/courses/spring-security</loc>
+    </url>
+
+    <url>
+        <loc>https://javabridgeconnect.org/contact-us</loc>
+    </url>
+
+</urlset>
